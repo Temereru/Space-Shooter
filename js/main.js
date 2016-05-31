@@ -1,4 +1,5 @@
 var textureLoader = new THREE.TextureLoader();
+var managedObjects = [];
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight);
@@ -17,47 +18,64 @@ textureLoader.load('../../assets/textures/tile_nebula_green_dff.png', function(t
   scene.add( plane );
 });
 
-playerModel.load(function(obj){
+var loadCallback = function(classObj, obj){
+  // console.log(classObj);
+  managedObjects.push(classObj);
   scene.add(obj);
-})
+};
+
+const player = new PlayerModel();
+console.log(player);
+player.load(loadCallback);
+const playerShot = new PlayerShot();
+playerShot.load(loadCallback);
+
+var manageObjects = function(){
+  for(var i = 0; i < managedObjects.length; i++){
+    // console.log(managedObjects[i])
+    managedObjects[i].manage();
+  }
+}
+
 
 function render() {
+  manageObjects();
   requestAnimationFrame( render );
   renderer.render( scene, camera );
 }
 render();
 
-// $(document).on('keydown', function(e){
-//   console.log(e.keyCode);
-//   switch(e.keyCode){
-//     case 37:
-//       playerModel.move('left');
-//       break;
-//     case 38:
-//       playerModel.move('up');
-//       break;
-//     case 39:
-//       playerModel.move('right');
-//       break;
-//     case 40:
-//       playerModel.move('down');
-//       break;
-//     // case 37&&38:
-//     //   playerModel.move('left up');
-//     //   break
-//   }
-// })
+function keyRouter(){
+  for (var i in keys) {
+    if (!keys.hasOwnProperty(i)) continue;
+    switch(i){
+    case '37':
+      player.move('left');
+      break;
+    case '39':
+      player.move('right');
+      break;
+    case '38':
+      player.move('up');
+      break;
+    case '40':
+      player.move('down');
+      break;
+    }
+  }
+}
+
 
 var keys = {};
 $(document).keydown(function (e) {
     keys[e.which] = true;
     
-    playerModel.move(keys);
+    keyRouter();
 });
 
 $(document).keyup(function (e) {
     delete keys[e.which];
     
-    playerModel.move(keys);
+    keyRouter();;
 });
 
