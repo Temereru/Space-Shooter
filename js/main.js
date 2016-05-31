@@ -68,7 +68,6 @@ function keyRouter(){
 var keys = {};
 $(document).keydown(function (e) {
     keys[e.which] = true;
-    console.log(e.which);
     keyRouter();
 });
 

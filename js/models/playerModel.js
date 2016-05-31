@@ -7,6 +7,11 @@ var textureLoader = new THREE.TextureLoader();
 class PlayerModel{
   constructor(){
     this.playerObj;
+    this.velocity = {
+      x:0,
+      y:0,
+      z:0
+    };
   }
 
 
@@ -30,29 +35,69 @@ class PlayerModel{
   }
 
   manage(){
+    //if the player arrives at bounding box dimensions, stop it.
+    if((this.playerObj.position.x <= -210 && this.velocity.x < 0)||(this.playerObj.position.x >= 210 && this.velocity.x > 0)){
+      this.velocity.x = 0
+    }
+    if((this.playerObj.position.y >= 290 && this.velocity.y > 0)|| (this.playerObj.position.y <= -290 && this.velocity.y < 0)){
+      this.velocity.y = 0;
+    }
+
+    //if the player was set a velocity in both axis
+    if(this.velocity.x !== 0  && this.velocity.y !== 0){
+      this.playerObj.position.x += this.velocity.x;
+      this.playerObj.position.y += this.velocity.y;
+      this.velocity.x = this.velocity.x / 1.1;
+      //if the velocity is between the given values, terminate movement;
+      if(this.velocity.x < 0.15 && this.velocity.x > -0.15){
+        this.velocity.x = 0;
+      }
+      this.velocity.y = this.velocity.y / 1.1;
+      if(this.velocity.y < 0.15 && this.velocity.y > -0.15){
+        this.velocity.y = 0;
+      }
+      //if the player was set a velocity in the X axis
+    }else if(this.velocity.x !== 0){
+      this.playerObj.position.x += this.velocity.x;
+      this.velocity.x = this.velocity.x / 1.1;
+      if(this.velocity.x < 0.15 && this.velocity.x > -0.15){
+        this.velocity.x = 0;
+      }
+      //if the player was set a velocity in the X axis
+    }else if(this.velocity.y !== 0){
+      this.playerObj.position.y += this.velocity.y;
+      this.velocity.y = this.velocity.y / 1.1;
+      if(this.velocity.y < 0.15 && this.velocity.y > -0.15){
+        this.velocity.y = 0;
+      }
+    }
   }
 
   move(direction){
     if(this.playerObj){
       switch(direction){
         case 'left':
-          if(this.playerObj.position.x >= -210){
-            this.playerObj.position.x -= 2;
+          this.velocity.x--;
+          if(this.velocity.x <= -3){
+            this.velocity.x = -3;
           }
           break;
         case 'right':
-          if(this.playerObj.position.x <= 210){
-            this.playerObj.position.x += 2;
+          this.velocity.x++;
+          if(this.velocity.x >= 3){
+            this.velocity.x = 3;
           }
           break;
         case 'up':
-          if(this.playerObj.position.y <= 290){
-            this.playerObj.position.y += 2;
+          this.velocity.y++;
+          if(this.velocity.y >= 3){
+            this.velocity.y = 3;
           }
           break;
         case 'down':
-          if(this.playerObj.position.y >= -290){
-            this.playerObj.position.y -= 2;
+          this.velocity.y--;
+          if(this.velocity.y <= -3){
+            this.velocity.y = -3;
           }
           break;
       }   
