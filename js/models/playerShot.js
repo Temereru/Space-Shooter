@@ -2,25 +2,26 @@ var jsonLoader = new THREE.JSONLoader();
 var textureLoader = new THREE.TextureLoader();
 
 class PlayerShot{
-  constructor(){
-    this.playerShotObj;
+  constructor(xPos,yPos){
+    let shotGeometry = new THREE.CylinderGeometry( 3, 3, 20, 64 );
+    this.playerShotObj = new THREE.Mesh(shotGeometry, playerShotMaterial);
+    this.playerShotObj.rotation.x = helperMethods.convertToRad(180)
+    this.playerShotObj.scale.x = 2;
+    this.playerShotObj.scale.y = 2;
+    this.playerShotObj.scale.z = 2;
+    this.playerShotObj.position.x = xPos;
+    this.playerShotObj.position.y = yPos;
   }
 
-  load(callback){
-    let that = this;
-    textureLoader.load('../../assets/textures/fx_lazer_orange_dff2.png', function(texture){
-        var playerShotMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true, opacity: 0.7, color: 0xFFFFFF } );
-        var shotGeometry = new THREE.CylinderGeometry( 3, 3, 20, 64 );
-        that.playerShotObj = new THREE.Mesh(shotGeometry, playerShotMaterial);
-        that.playerShotObj.rotation.x = helperMethods.convertToRad(180)
-        that.playerShotObj.scale.x = 2;
-        that.playerShotObj.scale.y = 2;
-        that.playerShotObj.scale.z = 2;
-        callback(that, that.playerShotObj);
-      });
+  clean(scene, objs, i){
+    objs.splice(i, 1);
+    scene.remove(this.playerShotObj);
   }
 
-  manage(){
-    this.playerShotObj.position.y += 4;
+  manage(scene, objs, i){
+    this.playerShotObj.position.y += 8;
+    if(this.playerShotObj.position.y > 350){
+      this.clean(scene, objs, i);
+    }
   }
 }

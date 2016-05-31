@@ -18,25 +18,20 @@ textureLoader.load('../../assets/textures/tile_nebula_green_dff.png', function(t
   scene.add( plane );
 });
 
-var loadCallback = function(classObj, obj){
-  // console.log(classObj);
+var addObjects = function(classObj, obj){
   managedObjects.push(classObj);
   scene.add(obj);
 };
 
 const player = new PlayerModel();
-console.log(player);
-player.load(loadCallback);
-const playerShot = new PlayerShot();
-playerShot.load(loadCallback);
+player.load(addObjects);
+
 
 var manageObjects = function(){
   for(var i = 0; i < managedObjects.length; i++){
-    // console.log(managedObjects[i])
-    managedObjects[i].manage();
+    managedObjects[i].manage(scene, managedObjects, i);
   }
 }
-
 
 function render() {
   manageObjects();
@@ -61,6 +56,10 @@ function keyRouter(){
     case '40':
       player.move('down');
       break;
+    case '17':
+      let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);
+      addObjects(shotInstance, shotInstance.playerShotObj)
+      break;
     }
   }
 }
@@ -69,7 +68,7 @@ function keyRouter(){
 var keys = {};
 $(document).keydown(function (e) {
     keys[e.which] = true;
-    
+    console.log(e.which);
     keyRouter();
 });
 
