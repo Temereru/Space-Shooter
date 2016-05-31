@@ -1,0 +1,22 @@
+{
+  "name": "space-shooter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Temereru/Space-Shooter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Temereru/Space-Shooter/issues"
+  },
+  "homepage": "https://github.com/Temereru/Space-Shooter#readme",
+  "dependencies": {
+    "jquery": "^2.2.4"
+  }
+}
