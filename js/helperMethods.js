@@ -5,7 +5,7 @@ const helperMethods = {
 
   getRand: function(max, min){
     if(min){
-      return Math.floor(Math.random() * max) - min;
+      return Math.floor(Math.random() * (max - min)) + min;
     }else{
       return Math.floor(Math.random() * max);
     }
