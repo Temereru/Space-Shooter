@@ -11,25 +11,29 @@ class PlayerShot{
     this.playerShotObj.scale.z = 2;
     this.playerShotObj.position.x = xPos;
     this.playerShotObj.position.y = yPos;
-    this.playerShotObj.type = "playerShot";
+    this.playerShotObj.objType = "playerShot";
     this.playerShotObj.destroyByHit = this.destroyByHit;
     this.playerShotObj.clean = this.clean;
     collidableMeshList.push(this.playerShotObj);
   }
 
-  clean(scene, objs, i){
-    objs.splice(i, 1);
+  clean(scene, objs, key){
+    for(let i = 0; i < objs.length; i++){
+      if(objs[i].key === key){
+        objs.splice(i, 1);
+      }
+    }
     scene.remove(this.playerShotObj || this);
   }
 
-  manage(scene, objs, i){
+  manage(scene, objs, key){
     this.playerShotObj.position.y += 8;
     if(this.playerShotObj.position.y > 350){
-      this.clean(scene, objs, i);
+      this.clean(scene, objs, key);
     }
   }
 
-  destroyByHit(scene, objs, i){
-    this.clean(scene, objs, i);
+  destroyByHit(scene, objs, key){
+    this.clean(scene, objs, key);
   }
 }

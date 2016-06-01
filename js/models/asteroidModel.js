@@ -11,12 +11,16 @@ class AsteroidModel {
     this.asteroidObj.destroyByHit = this.destroyByHit;
   };
 
-  clean(scene, objs, i){
-    objs.splice(i, 1);
+  clean(scene, objs, key){
+    for(let i = 0; i < objs.length; i++){
+      if(objs[i].key === key){
+        objs.splice(i, 1);
+      }
+    }
     scene.remove(this.asteroidObj);
   }
 
-  manage(scene, objs, i){
+  manage(scene, objs, key){
     var originPoint = this.asteroidObj.position.clone();
     
     for (var vertexIndex = 0; vertexIndex < this.asteroidObj.geometry.vertices.length; vertexIndex++)
@@ -29,14 +33,15 @@ class AsteroidModel {
       // console.log(ray);
       var collisionResults = ray.intersectObjects( collidableMeshList );
       if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
-        if(collisionResults[0].object.type === "playerShot"){
-          collisionResults[0].object.destroyByHit(scene, objs, i);
-          this.destroyByHit(scene, objs, i);
+        if(collisionResults[0].object.objType === "playerShot"){
+          collisionResults[0].object.destroyByHit(scene, objs, key);
+          this.destroyByHit(scene, objs, key);
+          console.log(collisionResults[0].object.type);
         }
     } 
   };
 
-  destroyByHit(scene, objs, i){
-    this.clean(scene, objs, i);
+  destroyByHit(scene, objs, key){
+    this.clean(scene, objs, key);
   }
 }

@@ -24,7 +24,11 @@ textureLoader.load('../../assets/textures/tile_nebula_green_dff.png', function(t
 });
 
 var addObjects = function(classObj, obj){
-  managedObjects.push(classObj);
+  let managedObj = {
+    key: helperMethods.getRand(10000),
+    obj: classObj
+  };
+  managedObjects.push(managedObj);
   //collidableMeshList.push(obj);
   scene.add(obj);
 };
@@ -37,12 +41,11 @@ function start(){
   player.load(addObjects);
   testAsteroid = new AsteroidModel();
   addObjects(testAsteroid, testAsteroid.asteroidObj);
-  // scene.add(testAsteroid.asteroidObj);
 }
 
 var manageObjects = function(){
   for(var i = 0; i < managedObjects.length; i++){
-    managedObjects[i].manage(scene, managedObjects, i);
+    managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key);
   }
 }
 
