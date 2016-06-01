@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Temereru/Space-Shooter#readme",
   "dependencies": {
+    "express": "^4.13.4",
     "jquery": "^2.2.4"
   }
 }
