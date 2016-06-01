@@ -1,3 +1,7 @@
+asteroidLoader().load(start);
+
+const collidableMeshList = [];
+
 var textureLoader = new THREE.TextureLoader();
 var managedObjects = [];
 
@@ -10,7 +14,8 @@ var camera = new THREE.OrthographicCamera( window.innerWidth / -2, window.innerW
 camera.position.z = 100;
 
 
-var planeGeometry = new THREE.PlaneGeometry( window.innerWidth * 0.5, window.innerHeight - 1);
+var planeGeometry = new THREE.PlaneGeometry( 497.5, window.innerHeight - 1);
+
 textureLoader.load('../../assets/textures/tile_nebula_green_dff.png', function(texture){
   var planeMaterial = new THREE.MeshBasicMaterial( { map: texture} );
   var plane = new THREE.Mesh( planeGeometry, planeMaterial );
@@ -20,12 +25,20 @@ textureLoader.load('../../assets/textures/tile_nebula_green_dff.png', function(t
 
 var addObjects = function(classObj, obj){
   managedObjects.push(classObj);
+  //collidableMeshList.push(obj);
   scene.add(obj);
 };
 
-const player = new PlayerModel();
-player.load(addObjects);
+let player;
+let testAsteroid;
 
+function start(){
+  player = new PlayerModel();
+  player.load(addObjects);
+  testAsteroid = new AsteroidModel();
+  addObjects(testAsteroid, testAsteroid.asteroidObj);
+  // scene.add(testAsteroid.asteroidObj);
+}
 
 var manageObjects = function(){
   for(var i = 0; i < managedObjects.length; i++){
