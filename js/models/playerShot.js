@@ -1,10 +1,8 @@
-var jsonLoader = new THREE.JSONLoader();
-var textureLoader = new THREE.TextureLoader();
 
 class PlayerShot{
   constructor(xPos,yPos){
     let shotGeometry = new THREE.CylinderGeometry( 3, 3, 20, 64 );
-    this.playerShotObj = new THREE.Mesh(shotGeometry, playerShotMaterial);
+    this.playerShotObj = new Physijs.ConvexMesh(shotGeometry, playerShotMaterial);
     this.playerShotObj.rotation.x = helperMethods.convertToRad(180)
     this.playerShotObj.scale.x = 2;
     this.playerShotObj.scale.y = 2;
@@ -35,5 +33,10 @@ class PlayerShot{
 
   destroyByHit(scene, objs, key){
     this.clean(scene, objs, key);
+    for(let i = 0; i < collidableMeshList.length; i++){
+      if(collidableMeshList[i].uuid === this.uuid){
+        collidableMeshList.splice(i, 1);
+      }
+    }
   }
 }

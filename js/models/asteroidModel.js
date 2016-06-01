@@ -3,7 +3,7 @@
 class AsteroidModel {
   constructor(){
     // console.log(loadedAsteroids.asteroidGeometry1);
-    this.asteroidObj = new THREE.Mesh(loadedAsteroids.asteroidGeometry1, loadedAsteroids.asteroidMaterial1);
+    this.asteroidObj = new Physijs.ConvexMesh(loadedAsteroids.asteroidGeometry1, loadedAsteroids.asteroidMaterial1);
     this.asteroidObj.scale.x = 40;
     this.asteroidObj.scale.y = 40;
     this.asteroidObj.scale.z = 40;
@@ -33,7 +33,7 @@ class AsteroidModel {
   }
 
   getVelocity(){
-    return {x:0,y:helperMethods.getRand(4, 2),z:0};
+    return {x:0,y:helperMethods.getRand(3, 1),z:0};
   }
 
   clean(scene, objs, key){
@@ -43,10 +43,12 @@ class AsteroidModel {
       }
     }
     scene.remove(this.asteroidObj);
+    destroyCount++;
   }
 
   manage(scene, objs, key){
     this.asteroidObj.position.y -= this.asteroidObj.velocity.y;
+    this.asteroidObj.__dirtyPosition = true;
     if(this.asteroidObj.position.y <= -400){
       this.clean(scene, objs, key);
     }
@@ -58,19 +60,33 @@ class AsteroidModel {
       var localVertex = this.asteroidObj.geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4( this.asteroidObj.matrix );
       var directionVector = globalVertex.sub( this.asteroidObj.position );
-      
       var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
       // console.log(ray);
       var collisionResults = ray.intersectObjects( collidableMeshList );
-      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() ) 
+      if ( collisionResults.length > 0 && collisionResults[0].distance < 40 )
+      {
+        // console.log(directionVector.length());
         if(collisionResults[0].object.objType === "playerShot"){
           collisionResults[0].object.destroyByHit(scene, objs, key);
           this.destroyByHit(scene, objs, key);
+        }else if(collisionResults[0].object.objType === "player"){
+          
+          collisionResults[0].object.destroyByHit(scene, objs, key);
+          this.destroyByHit(scene, objs, key);
         }
+      }
     } 
   };
 
   destroyByHit(scene, objs, key){
     this.clean(scene, objs, key);
+    score += 10;
   }
+
+  addToCollision(other_object){
+    this.asteroidObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
+      console.log('hit');
+      // `this` has collided with `other_object` with an impact speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
+    });
+  };
 }

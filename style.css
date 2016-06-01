@@ -1,0 +1,52 @@
+body {
+  margin: 0; 
+}
+
+canvas { 
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.overlay {
+  display: none;
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 10;
+}
+
+.overlay .lose {
+  color: white;
+  position: absolute;
+  left: 40%;
+  top: 35%;
+}
+
+.overlay .win {
+  color: white;
+  position: absolute;
+  left: 45%;
+  top: 35%;
+}
+
+.overlay h4 {
+  color: white;
+  position: absolute;
+  left: 45%;
+  top: 40%;
+}
+
+.score {
+  position: absolute;
+  color: white;
+  left: 5%;
+  top: 5%;
+}
+
+.show {
+  display: block;
+}

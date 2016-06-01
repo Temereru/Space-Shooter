@@ -2,23 +2,28 @@
 <html>
 <head>
   <title>Space Shooter</title>
-  <style>
-    body { margin: 0; }
-    canvas { padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;}
-  </style>
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-
+  <h2 class="score"></h2>
+  <div class="overlay">
+    <h1 class="game-text"></h1>
+    <h4>To restart, press R</h4>
+  </div>
 <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="js/imports/three.js"></script>
+<script type="text/javascript" src="js/imports/Physijs/physi.js"></script>
+<script type="text/javascript">
+  Physijs.scripts.worker = 'physijs_worker.js';
+  Physijs.scripts.ammo = '../ammo.js';
+</script>
+
 <script type="text/javascript" src="js/helperMethods.js"></script>
 <script type="text/javascript" src="js/loaders/shotsLoader.js"></script>
 <script type="text/javascript" src="js/loaders/asteroidsLoader.js"></script>
+<script type="text/javascript" src="js/loaders/playerLoader.js"></script>
+<script type="text/javascript" src="js/loaders/sceneLoader.js"></script>
 <script type="text/javascript" src="js/models/playerModel.js"></script>
 <script type="text/javascript" src="js/models/playerShot.js"></script>
 <script type="text/javascript" src="js/models/asteroidModel.js"></script>

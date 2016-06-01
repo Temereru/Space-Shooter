@@ -8,7 +8,7 @@ const asteroidLoader = function(){
     let that = this;
     asteroidJsonLoader.load('../../assets/models/prop_asterois_01.json', function(geometry, material){
       asteroidTextureLoader.load('../../assets/textures/prop_asteroid_01_dff.png', function(texture){
-        loadedAsteroids.asteroidMaterial1 = new THREE.MeshBasicMaterial( { map: texture} );
+        loadedAsteroids.asteroidMaterial1 = Physijs.createMaterial(new THREE.MeshBasicMaterial( { map: texture} ),0,0);
         loadedAsteroids.asteroidGeometry1 = geometry;
 
         callback();
