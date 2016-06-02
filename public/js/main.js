@@ -45,6 +45,8 @@ function finishedLoading(){
 }
 
 function spawnWave(){
+  collidableMeshList = [];
+  collidableMeshList.push(player.playerObj);
   for(let i = 0; i < 5; i++){
     testAsteroid = new AsteroidModel();
     addObjects(testAsteroid, testAsteroid.asteroidObj);

@@ -23,7 +23,6 @@ class PlayerModel{
     this.playerObj.destroyByHit = this.destroyByHit;
     this.playerObj.clean = this.clean;
     callback(this, this.playerObj);
-    collidableMeshList.push(player.playerObj);
   }
 
   clean(scene, objs, key){
