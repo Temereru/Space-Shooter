@@ -4,7 +4,8 @@ let managedObjects = [];
 let collidableMeshList = [];
 let gameRunning = true;
 let score = 0;
-let destroyCount = 0;
+let asteroids = [];
+
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight);
@@ -57,20 +58,20 @@ function restart(){
   collidableMeshList = [];
   gameRunning = true;
   score = 0;
-  destroyCount = 0;
+  asteroids = [];
   $('.overlay').removeClass('show');
   start();
 }
 
 var manageObjects = function(){
   for(var i = 0; i < managedObjects.length; i++){
-    managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key);
+    managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key, asteroids);
   }
 }
 
 function render() {
   if(gameRunning){
-    if(destroyCount === 5){
+    if(asteroids.length === 0){
       endGame(true);
     }
     $('.score').html('Score: ' + score);

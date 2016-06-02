@@ -17,6 +17,9 @@ class AsteroidModel {
     let vel = this.getVelocity();
     this.asteroidObj.velocity = vel;
     this.asteroidObj.destroyByHit = this.destroyByHit;
+    this.asteroidObj.objType = "asteroid";
+    this.asteroidObj.key = helperMethods.getRand(1000000);
+    asteroids.push(this.asteroidObj.key);
   };
 
   getStartPos(){
@@ -36,21 +39,25 @@ class AsteroidModel {
     return {x:0,y:helperMethods.getRand(3, 1),z:0};
   }
 
-  clean(scene, objs, key){
+  clean(scene, objs, key, asteroids){
     for(let i = 0; i < objs.length; i++){
       if(objs[i].key === key){
         objs.splice(i, 1);
       }
     }
     scene.remove(this.asteroidObj);
-    destroyCount++;
+    let idx = asteroids.indexOf(this.asteroidObj.key);
+    
+    if(idx !== -1){
+      asteroids.splice(idx, 1);
+    }
   }
 
-  manage(scene, objs, key){
+  manage(scene, objs, key, asteroids){
     this.asteroidObj.position.y -= this.asteroidObj.velocity.y;
     this.asteroidObj.__dirtyPosition = true;
     if(this.asteroidObj.position.y <= -400){
-      this.clean(scene, objs, key);
+      this.clean(scene, objs, key, asteroids);
     }
 
     var originPoint = this.asteroidObj.position.clone();
@@ -68,18 +75,17 @@ class AsteroidModel {
         // console.log(directionVector.length());
         if(collisionResults[0].object.objType === "playerShot"){
           collisionResults[0].object.destroyByHit(scene, objs, key);
-          this.destroyByHit(scene, objs, key);
-        }else if(collisionResults[0].object.objType === "player"){
-          
+          this.destroyByHit(scene, objs, key, asteroids);
+        }else if(collisionResults[0].object.objType === "player"){     
           collisionResults[0].object.destroyByHit(scene, objs, key);
-          this.destroyByHit(scene, objs, key);
+          this.destroyByHit(scene, objs, key, asteroids);
         }
       }
     } 
   };
 
-  destroyByHit(scene, objs, key){
-    this.clean(scene, objs, key);
+  destroyByHit(scene, objs, key, asteroids){
+    this.clean(scene, objs, key, asteroids);
     score += 10;
   }
 
