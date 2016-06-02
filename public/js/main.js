@@ -100,7 +100,7 @@ function render() {
     }
     $('.score').html('Score: ' + score);
     manageObjects();
-    scene.simulate();
+    // scene.simulate();
     renderer.render( scene, camera );
     requestAnimationFrame( render );
   }
