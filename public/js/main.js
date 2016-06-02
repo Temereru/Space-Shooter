@@ -8,6 +8,7 @@ let score = 0;
 let asteroids = [];
 let betweenWaves = true;
 let waveNumber = 0;
+let firstRun = true;
 
 
 var renderer = new THREE.WebGLRenderer();
@@ -137,7 +138,7 @@ $(document).keydown(function (e) {
     if(e.which === 82 && !gameRunning){
       restart();
     };
-    if(e.which === 13 && !gameRunning){
+    if(e.which === 13 && !gameRunning && firstRun){
       while(!loaded){
 
       }
@@ -154,6 +155,7 @@ $(document).keyup(function (e) {
 });
 
 function endGame(win){
+  firstRun = false;
   if(win){
     gameRunning = false;
     $('.game-text').html('You Win');
