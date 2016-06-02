@@ -1,10 +1,13 @@
 asteroidLoader().load(loadPlayer);
 
+let loaded = false;
 let managedObjects = [];
 let collidableMeshList = [];
-let gameRunning = true;
+let gameRunning = false;
 let score = 0;
 let asteroids = [];
+let betweenWaves = true;
+let waveNumber = 0;
 
 
 var renderer = new THREE.WebGLRenderer();
@@ -33,32 +36,45 @@ function loadPlayer(){
 }
 
 function loadScene(){
-  sceneLoader().load(start)
+  sceneLoader().load(finishedLoading)
+}
+
+function finishedLoading(){
+  loaded = true;
+  $('.loading-text').removeClass('show');
+}
+
+function spawnWave(){
+  for(let i = 0; i < 5; i++){
+    testAsteroid = new AsteroidModel();
+    addObjects(testAsteroid, testAsteroid.asteroidObj);
+  }
+  waveNumber++;
+  $('.wave').html('Wave ' + waveNumber)
+  betweenWaves = false;
 }
 
 function start(){
-  
+  $('.start-overlay').removeClass('show');
+  gameRunning = true;
   let planeGeometry = new THREE.PlaneGeometry( 497.5, window.innerHeight - 1);
   let plane = new THREE.Mesh( planeGeometry, loadedScene.planeMaterial );
   plane.position.z = -10;
   scene.add(plane);
   player = new PlayerModel();
   player.load(addObjects);
-  for(let i = 0; i < 5; i++){
-    testAsteroid = new AsteroidModel();
-    addObjects(testAsteroid, testAsteroid.asteroidObj);
-  }
+  spawnWave();
   render();
 }
 
 function restart(){
-  console.log('restart');
   scene = new Physijs.Scene();
   managedObjects = [];
   collidableMeshList = [];
-  gameRunning = true;
   score = 0;
   asteroids = [];
+  betweenWaves = false;
+  waveNumber = 0;
   $('.overlay').removeClass('show');
   start();
 }
@@ -71,8 +87,14 @@ var manageObjects = function(){
 
 function render() {
   if(gameRunning){
-    if(asteroids.length === 0){
+    if(asteroids.length === 0 && waveNumber === 10 && !betweenWaves){
       endGame(true);
+    }else if(asteroids.length === 0 && !betweenWaves){
+      betweenWaves = true;
+      setTimeout(function(){
+        console.log('timeout');
+        spawnWave();
+      }, 2000);
     }
     $('.score').html('Score: ' + score);
     manageObjects();
@@ -114,6 +136,12 @@ $(document).keydown(function (e) {
     if(e.which === 82 && !gameRunning){
       restart();
     };
+    if(e.which === 13 && !gameRunning){
+      while(!loaded){
+
+      }
+      start();
+    }
     keys[e.which] = true;
     keyRouter();
 });
