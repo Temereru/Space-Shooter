@@ -94,7 +94,6 @@ function render() {
     }else if(asteroids.length === 0 && !betweenWaves){
       betweenWaves = true;
       setTimeout(function(){
-        console.log('timeout');
         spawnWave();
       }, 2000);
     }
