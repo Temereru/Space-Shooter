@@ -22,14 +22,14 @@ class PlayerModel{
     this.playerObj.objType = 'player';
     this.playerObj.destroyByHit = this.destroyByHit;
     this.playerObj.clean = this.clean;
-    this.speed = 15;
+    this.speed = 20;
     this.direction = {
       left: false,
       right: false,
       up: false,
       down: false
     }
-    this.drag = 1.03;
+    this.drag = 1.05;
     callback(this, this.playerObj);
   }
 
@@ -45,124 +45,52 @@ class PlayerModel{
   manage(scene, objs, key){
     let vel = this.playerObj.getLinearVelocity();
     if(this.direction.left){
-      vel = this.playerObj.getLinearVelocity();
-      vel.x -= this.speed;
-      if(vel.x <= -5 * this.speed){
-        this.playerObj.setLinearVelocity(new THREE.Vector3(-5 * this.speed, vel.y, vel.z));
-        console.log(vel.x);
-      }else{
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
-      }
+      vel.x = (vel.x -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.x - this.speed);
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
     }else if(!this.direction.right && vel.x < 0){
-      vel = this.playerObj.getLinearVelocity();
-      let delta = (vel.x / this.drag) < -5 ? vel.x / this.drag : 0;
+      let delta = (vel.x / this.drag) < -5 ? (vel.x / this.drag) : 0;
       this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
     }
+
+    vel = this.playerObj.getLinearVelocity();
     if(this.direction.right){
-      vel = this.playerObj.getLinearVelocity();
-      vel.x += this.speed;
-      if(vel.x >= 5 * this.speed){
-        console.log(vel.x);
-        this.playerObj.setLinearVelocity(new THREE.Vector3(5 * this.speed, vel.y, vel.z));
-      }else{
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
-      } 
+      vel.x = (vel.x += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.x + this.speed);
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
     }else if(!this.direction.left && vel.x > 0){
-      vel = this.playerObj.getLinearVelocity();
-      let delta = (vel.x / this.drag) > 5 ? vel.x / this.drag : 0;
+      let delta = (vel.x / this.drag) > 5 ? (vel.x / this.drag) : 0;
       this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
     }
+
+    vel = this.playerObj.getLinearVelocity();
     if(this.direction.up){
-      vel = this.playerObj.getLinearVelocity();
-      vel.y += this.speed;
-      if(vel.y >= 5 * this.speed){
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 5 * this.speed, vel.z));
-      }else{
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
-      }
+      vel.y = (vel.y += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.y + this.speed);
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
     }else if(!this.direction.down && vel.y > 0){
-      vel = this.playerObj.getLinearVelocity();
-      let delta = (vel.y / this.drag) > 5 ? vel.y / this.drag : 0;
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
-    }
-    if(this.direction.down){
-      vel = this.playerObj.getLinearVelocity();
-      vel.y -= this.speed;
-      if(vel.y <= -5 * this.speed){
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, -5 * this.speed, vel.z));
-      }else{
-        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
-      }
-    }else if(!this.direction.up && vel.y < 0){
-      vel = this.playerObj.getLinearVelocity();
-      let delta = (vel.y / this.drag) < -5 ? vel.y / this.drag : 0;
+      let delta = (vel.y / this.drag) > 5 ? (vel.y / this.drag) : 0;
       this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
     }
 
     vel = this.playerObj.getLinearVelocity();
-    if((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0)){
-      this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
+    if(this.direction.down){
+      vel.y = (vel.y -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.y - this.speed);
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+    }else if(!this.direction.up && vel.y < 0){
+      let delta = (vel.y / this.drag) < -5 ? (vel.y / this.drag) : 0;
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
     }
-    if((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0)){
+
+    
+    vel = this.playerObj.getLinearVelocity();
+    if(((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0))&&((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0))){
+      this.playerObj.setLinearVelocity(new THREE.Vector3(0, 0, vel.z));
+    }
+    else if((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0)){
       this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 0, vel.z));
     }
-
-
-
-    // //if the player was set a velocity in both axis
-    // if(this.playerObj._physijs.linearVelocity.x !== 0  && this.playerObj._physijs.linearVelocity.y !== 0){
-    //   this.playerObj.position.x += this.playerObj._physijs.linearVelocity.x;
-    //   this.playerObj.position.y += this.playerObj._physijs.linearVelocity.y;
-    //   this.playerObj.__dirtyPosition = true;
-    //   this.playerObj._physijs.linearVelocity.x = this.playerObj._physijs.linearVelocity.x / 1.1;
-    //   //if the velocity is between the given values, terminate movement;
-    //   if(this.playerObj._physijs.linearVelocity.x < 0.15 && this.playerObj._physijs.linearVelocity.x > -0.15){
-    //     this.playerObj._physijs.linearVelocity.x = 0;
-    //   }
-    //   this.playerObj._physijs.linearVelocity.y = this.playerObj._physijs.linearVelocity.y / 1.1;
-    //   if(this.playerObj._physijs.linearVelocity.y < 0.15 && this.playerObj._physijs.linearVelocity.y > -0.15){
-    //     this.playerObj._physijs.linearVelocity.y = 0;
-    //   }
-    //   //if the player was set a velocity in the X axis
-    // }else if(this.playerObj._physijs.linearVelocity.x !== 0){
-    //   this.playerObj.position.x += this.playerObj._physijs.linearVelocity.x;
-    //   this.playerObj.__dirtyPosition = true;
-    //   this.playerObj._physijs.linearVelocity.x = this.playerObj._physijs.linearVelocity.x / 1.1;
-    //   if(this.playerObj._physijs.linearVelocity.x < 0.15 && this.playerObj._physijs.linearVelocity.x > -0.15){
-    //     this.playerObj._physijs.linearVelocity.x = 0;
-    //   }
-    //   //if the player was set a velocity in the X axis
-    // }else if(this.playerObj._physijs.linearVelocity.y !== 0){
-    //   this.playerObj.position.y += this.playerObj._physijs.linearVelocity.y;
-    //   this.playerObj.__dirtyPosition = true;
-    //   this.playerObj._physijs.linearVelocity.y = this.playerObj._physijs.linearVelocity.y / 1.1;
-    //   if(this.playerObj._physijs.linearVelocity.y < 0.15 && this.playerObj._physijs.linearVelocity.y > -0.15){
-    //     this.playerObj._physijs.linearVelocity.y = 0;
-    //   }
-    // }
-  }
-
-
-
-  move(direction){
-    if(this.playerObj){
-      let vel = this.playerObj.getLinearVelocity();
-      switch(direction){
-        case 'left':
-          
-          break;
-        case 'right':
-
-          break;
-        case 'up':
-          
-          break;
-        case 'down':
-
-          break;
-      }   
+    else if((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0)){
+      this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
     }
-  };
+  }
 
   destroyByHit(scene, objs, key){
     this.clean(scene, objs, key);
