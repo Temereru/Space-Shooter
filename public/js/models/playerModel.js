@@ -14,14 +14,22 @@ class PlayerModel{
     this.playerObj.scale.z = 40;
     // playerObj.rotation.z = 5;
     this.playerObj.position.y = -280;
-    this.playerObj.velocity = {
-      x:0,
-      y:0,
-      z:0
-    };
+    // this.playerObj._physijs.linearVelocity = {
+    //   x:0,
+    //   y:0,
+    //   z:0
+    // };
     this.playerObj.objType = 'player';
     this.playerObj.destroyByHit = this.destroyByHit;
     this.playerObj.clean = this.clean;
+    this.speed = 15;
+    this.direction = {
+      left: false,
+      right: false,
+      up: false,
+      down: false
+    }
+    this.drag = 1.03;
     callback(this, this.playerObj);
   }
 
@@ -35,75 +43,122 @@ class PlayerModel{
   }
 
   manage(scene, objs, key){
-    //if the player arrives at bounding box dimensions, stop it.
-    if((this.playerObj.position.x <= -210 && this.playerObj.velocity.x < 0)||(this.playerObj.position.x >= 210 && this.playerObj.velocity.x > 0)){
-      this.playerObj.velocity.x = 0
+    let vel = this.playerObj.getLinearVelocity();
+    if(this.direction.left){
+      vel = this.playerObj.getLinearVelocity();
+      vel.x -= this.speed;
+      if(vel.x <= -5 * this.speed){
+        this.playerObj.setLinearVelocity(new THREE.Vector3(-5 * this.speed, vel.y, vel.z));
+        console.log(vel.x);
+      }else{
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      }
+    }else if(!this.direction.right && vel.x < 0){
+      vel = this.playerObj.getLinearVelocity();
+      let delta = (vel.x / this.drag) < -5 ? vel.x / this.drag : 0;
+      this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
     }
-    if((this.playerObj.position.y >= 290 && this.playerObj.velocity.y > 0)|| (this.playerObj.position.y <= -290 && this.playerObj.velocity.y < 0)){
-      this.playerObj.velocity.y = 0;
+    if(this.direction.right){
+      vel = this.playerObj.getLinearVelocity();
+      vel.x += this.speed;
+      if(vel.x >= 5 * this.speed){
+        console.log(vel.x);
+        this.playerObj.setLinearVelocity(new THREE.Vector3(5 * this.speed, vel.y, vel.z));
+      }else{
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      } 
+    }else if(!this.direction.left && vel.x > 0){
+      vel = this.playerObj.getLinearVelocity();
+      let delta = (vel.x / this.drag) > 5 ? vel.x / this.drag : 0;
+      this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
+    }
+    if(this.direction.up){
+      vel = this.playerObj.getLinearVelocity();
+      vel.y += this.speed;
+      if(vel.y >= 5 * this.speed){
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 5 * this.speed, vel.z));
+      }else{
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      }
+    }else if(!this.direction.down && vel.y > 0){
+      vel = this.playerObj.getLinearVelocity();
+      let delta = (vel.y / this.drag) > 5 ? vel.y / this.drag : 0;
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
+    }
+    if(this.direction.down){
+      vel = this.playerObj.getLinearVelocity();
+      vel.y -= this.speed;
+      if(vel.y <= -5 * this.speed){
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, -5 * this.speed, vel.z));
+      }else{
+        this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      }
+    }else if(!this.direction.up && vel.y < 0){
+      vel = this.playerObj.getLinearVelocity();
+      let delta = (vel.y / this.drag) < -5 ? vel.y / this.drag : 0;
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
     }
 
-    //if the player was set a velocity in both axis
-    if(this.playerObj.velocity.x !== 0  && this.playerObj.velocity.y !== 0){
-      this.playerObj.position.x += this.playerObj.velocity.x;
-      this.playerObj.position.y += this.playerObj.velocity.y;
-      this.playerObj.__dirtyPosition = true;
-      this.playerObj.velocity.x = this.playerObj.velocity.x / 1.1;
-      //if the velocity is between the given values, terminate movement;
-      if(this.playerObj.velocity.x < 0.15 && this.playerObj.velocity.x > -0.15){
-        this.playerObj.velocity.x = 0;
-      }
-      this.playerObj.velocity.y = this.playerObj.velocity.y / 1.1;
-      if(this.playerObj.velocity.y < 0.15 && this.playerObj.velocity.y > -0.15){
-        this.playerObj.velocity.y = 0;
-      }
-      //if the player was set a velocity in the X axis
-    }else if(this.playerObj.velocity.x !== 0){
-      this.playerObj.position.x += this.playerObj.velocity.x;
-      this.playerObj.__dirtyPosition = true;
-      this.playerObj.velocity.x = this.playerObj.velocity.x / 1.1;
-      if(this.playerObj.velocity.x < 0.15 && this.playerObj.velocity.x > -0.15){
-        this.playerObj.velocity.x = 0;
-      }
-      //if the player was set a velocity in the X axis
-    }else if(this.playerObj.velocity.y !== 0){
-      this.playerObj.position.y += this.playerObj.velocity.y;
-      this.playerObj.__dirtyPosition = true;
-      this.playerObj.velocity.y = this.playerObj.velocity.y / 1.1;
-      if(this.playerObj.velocity.y < 0.15 && this.playerObj.velocity.y > -0.15){
-        this.playerObj.velocity.y = 0;
-      }
+    vel = this.playerObj.getLinearVelocity();
+    if((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0)){
+      this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
     }
+    if((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0)){
+      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 0, vel.z));
+    }
+
+
+
+    // //if the player was set a velocity in both axis
+    // if(this.playerObj._physijs.linearVelocity.x !== 0  && this.playerObj._physijs.linearVelocity.y !== 0){
+    //   this.playerObj.position.x += this.playerObj._physijs.linearVelocity.x;
+    //   this.playerObj.position.y += this.playerObj._physijs.linearVelocity.y;
+    //   this.playerObj.__dirtyPosition = true;
+    //   this.playerObj._physijs.linearVelocity.x = this.playerObj._physijs.linearVelocity.x / 1.1;
+    //   //if the velocity is between the given values, terminate movement;
+    //   if(this.playerObj._physijs.linearVelocity.x < 0.15 && this.playerObj._physijs.linearVelocity.x > -0.15){
+    //     this.playerObj._physijs.linearVelocity.x = 0;
+    //   }
+    //   this.playerObj._physijs.linearVelocity.y = this.playerObj._physijs.linearVelocity.y / 1.1;
+    //   if(this.playerObj._physijs.linearVelocity.y < 0.15 && this.playerObj._physijs.linearVelocity.y > -0.15){
+    //     this.playerObj._physijs.linearVelocity.y = 0;
+    //   }
+    //   //if the player was set a velocity in the X axis
+    // }else if(this.playerObj._physijs.linearVelocity.x !== 0){
+    //   this.playerObj.position.x += this.playerObj._physijs.linearVelocity.x;
+    //   this.playerObj.__dirtyPosition = true;
+    //   this.playerObj._physijs.linearVelocity.x = this.playerObj._physijs.linearVelocity.x / 1.1;
+    //   if(this.playerObj._physijs.linearVelocity.x < 0.15 && this.playerObj._physijs.linearVelocity.x > -0.15){
+    //     this.playerObj._physijs.linearVelocity.x = 0;
+    //   }
+    //   //if the player was set a velocity in the X axis
+    // }else if(this.playerObj._physijs.linearVelocity.y !== 0){
+    //   this.playerObj.position.y += this.playerObj._physijs.linearVelocity.y;
+    //   this.playerObj.__dirtyPosition = true;
+    //   this.playerObj._physijs.linearVelocity.y = this.playerObj._physijs.linearVelocity.y / 1.1;
+    //   if(this.playerObj._physijs.linearVelocity.y < 0.15 && this.playerObj._physijs.linearVelocity.y > -0.15){
+    //     this.playerObj._physijs.linearVelocity.y = 0;
+    //   }
+    // }
   }
 
 
 
   move(direction){
     if(this.playerObj){
+      let vel = this.playerObj.getLinearVelocity();
       switch(direction){
         case 'left':
-          this.playerObj.velocity.x--;
-          if(this.playerObj.velocity.x <= -3){
-            this.playerObj.velocity.x = -3;
-          }
+          
           break;
         case 'right':
-          this.playerObj.velocity.x++;
-          if(this.playerObj.velocity.x >= 3){
-            this.playerObj.velocity.x = 3;
-          }
+
           break;
         case 'up':
-          this.playerObj.velocity.y++;
-          if(this.playerObj.velocity.y >= 3){
-            this.playerObj.velocity.y = 3;
-          }
+          
           break;
         case 'down':
-          this.playerObj.velocity.y--;
-          if(this.playerObj.velocity.y <= -3){
-            this.playerObj.velocity.y = -3;
-          }
+
           break;
       }   
     }
@@ -122,7 +177,7 @@ class PlayerModel{
   addToCollision(other_object){
       this.playerObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
         console.log('hit');
-        // `this` has collided with `other_object` with an impact speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
+        // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
       });
   };
 }

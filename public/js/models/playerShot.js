@@ -26,6 +26,7 @@ class PlayerShot{
 
   manage(scene, objs, key){
     this.playerShotObj.position.y += 8;
+    this.playerShotObj.__dirtyPosition = true;
     if(this.playerShotObj.position.y > 350){
       this.clean(scene, objs, key);
     }

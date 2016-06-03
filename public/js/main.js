@@ -1,5 +1,7 @@
 asteroidLoader().load(loadPlayer);
 
+let keyboard = new THREEx.KeyboardState();
+
 let loaded = false;
 let managedObjects = [];
 let collidableMeshList = [];
@@ -9,6 +11,7 @@ let asteroids = [];
 let betweenWaves = true;
 let waveNumber = 0;
 let firstRun = true;
+let shotCounter = 0;
 
 
 var renderer = new THREE.WebGLRenderer();
@@ -16,7 +19,7 @@ renderer.setSize( window.innerWidth, window.innerHeight);
 document.body.appendChild( renderer.domElement );
 
 var scene = new Physijs.Scene();
-scene.setGravity(new THREE.Vector3( 0, -30, 0 ));
+scene.setGravity(new THREE.Vector3( 0, 0, 0 ));
 var camera = new THREE.OrthographicCamera( window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 1000 );
 camera.position.z = 100;
 
@@ -78,11 +81,13 @@ function restart(){
   asteroids = [];
   betweenWaves = false;
   waveNumber = 0;
+  shotCounter = 0;
   $('.overlay').removeClass('show');
   start();
 }
 
 var manageObjects = function(){
+  manageKeyboard();
   for(var i = 0; i < managedObjects.length; i++){
     managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key, asteroids);
   }
@@ -100,58 +105,57 @@ function render() {
     }
     $('.score').html('Score: ' + score);
     manageObjects();
-    // scene.simulate();
+    scene.simulate();
     renderer.render( scene, camera );
     requestAnimationFrame( render );
   }
 }
 
-function keyRouter(){
-  if(gameRunning){
-    for (var i in keys) {
-      if (!keys.hasOwnProperty(i)) continue;
-      switch(i){
-      case '37':
-        player.move('left');
-        break;
-      case '39':
-        player.move('right');
-        break;
-      case '38':
-        player.move('up');
-        break;
-      case '40':
-        player.move('down');
-        break;
-      case '17':
-        let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);
-        addObjects(shotInstance, shotInstance.playerShotObj)
-        break;
-      }
+function manageKeyboard(){
+  if(keyboard.pressed('left')){
+    player.direction.left = true;
+  }else{
+    player.direction.left = false;
+  }
+  if(keyboard.pressed('right')){
+    player.direction.right = true;
+  }else{
+    player.direction.right = false;
+  }
+  if(keyboard.pressed('up')){
+    player.direction.up = true;
+  }else{
+    player.direction.up = false;
+  }
+  if(keyboard.pressed('down')){
+    player.direction.down = true;
+  }else{
+    player.direction.down = false;
+  }
+  if(keyboard.pressed('ctrl')){
+    if(shotCounter % 10 === 0 || shotCounter === 0){
+      let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);
+      addObjects(shotInstance, shotInstance.playerShotObj);
     }
+    shotCounter++;
+  }else{
+    shotCounter = 0;
   }
 }
 
-
-var keys = {};
 $(document).keydown(function (e) {
-    if(e.which === 82 && !gameRunning){
-      restart();
-    };
-    if(e.which === 13 && !gameRunning && firstRun){
-      while(!loaded){
-
+  switch(e.which){
+    case 82:
+      if(!gameRunning){
+        restart();
+      };
+      break;
+    case 13:
+      if(!gameRunning && firstRun && loaded){
+        start();
       }
-      start();
-    }
-    keys[e.which] = true;
-    keyRouter();
-});
-
-$(document).keyup(function (e) {
-    delete keys[e.which];
-    
-    keyRouter();;
+      break;
+  }
 });
 
 function endGame(win){

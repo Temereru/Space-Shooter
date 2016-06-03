@@ -56,9 +56,9 @@ class AsteroidModel {
   manage(scene, objs, key, asteroids){
     this.asteroidObj.position.y -= this.asteroidObj.velocity.y;
     this.asteroidObj.__dirtyPosition = true;
-    if(this.asteroidObj.position.y <= -400){
-      this.clean(scene, objs, key, asteroids);
-    }
+    // if(this.asteroidObj.position.y <= -400){
+    //   this.clean(scene, objs, key, asteroids);
+    // }
 
     var originPoint = this.asteroidObj.position.clone();
     
