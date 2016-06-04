@@ -3,7 +3,7 @@
 class AsteroidModel {
   constructor(){
     // console.log(loadedAsteroids.asteroidGeometry1);
-    this.asteroidObj = new Physijs.ConvexMesh(loadedAsteroids.asteroidGeometry1, loadedAsteroids.asteroidMaterial1);
+    this.asteroidObj = new Physijs.ConvexMesh(loadedAsteroids.asteroidGeometry1, loadedAsteroids.asteroidMaterial1, 1);
     this.asteroidObj.scale.x = 40;
     this.asteroidObj.scale.y = 40;
     this.asteroidObj.scale.z = 40;
@@ -18,7 +18,12 @@ class AsteroidModel {
     this.asteroidObj.objType = "asteroid";
     this.asteroidObj.key = helperMethods.getRand(1000000);
     asteroids.push(this.asteroidObj.key);
+    // Enable CCD if the object moves more than 1 meter in one simulation frame
+    // this.asteroidObj.setCcdMotionThreshold(1);
 
+    // // Set the radius of the embedded sphere such that it is smaller than the object
+    // this.asteroidObj.setCcdSweptSphereRadius(100);
+    
     this.setVelocity = true;
   };
 
@@ -62,28 +67,28 @@ class AsteroidModel {
       this.clean(scene, objs, key, asteroids);
     }
 
-    var originPoint = this.asteroidObj.position.clone();
+    // var originPoint = this.asteroidObj.position.clone();
     
-    for (var vertexIndex = 0; vertexIndex < this.asteroidObj.geometry.vertices.length; vertexIndex++)
-    {   
-      var localVertex = this.asteroidObj.geometry.vertices[vertexIndex].clone();
-      var globalVertex = localVertex.applyMatrix4( this.asteroidObj.matrix );
-      var directionVector = globalVertex.sub( this.asteroidObj.position );
-      var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
-      // console.log(ray);
-      var collisionResults = ray.intersectObjects( collidableMeshList );
-      if ( collisionResults.length > 0 && collisionResults[0].distance < 40 )
-      {
-        // console.log(directionVector.length());
-        if(collisionResults[0].object.objType === "playerShot"){
-          collisionResults[0].object.destroyByHit(scene, objs, key);
-          this.destroyByHit(scene, objs, key, asteroids);
-        }else if(collisionResults[0].object.objType === "player"){     
-          collisionResults[0].object.destroyByHit(scene, objs, key);
-          this.destroyByHit(scene, objs, key, asteroids);
-        }
-      }
-    } 
+    // for (var vertexIndex = 0; vertexIndex < this.asteroidObj.geometry.vertices.length; vertexIndex++)
+    // {   
+    //   var localVertex = this.asteroidObj.geometry.vertices[vertexIndex].clone();
+    //   var globalVertex = localVertex.applyMatrix4( this.asteroidObj.matrix );
+    //   var directionVector = globalVertex.sub( this.asteroidObj.position );
+    //   var ray = new THREE.Raycaster( originPoint, directionVector.clone().normalize() );
+    //   // console.log(ray);
+    //   var collisionResults = ray.intersectObjects( collidableMeshList );
+    //   if ( collisionResults.length > 0 && collisionResults[0].distance < 40 )
+    //   {
+    //     // console.log(directionVector.length());
+    //     if(collisionResults[0].object.objType === "playerShot"){
+    //       collisionResults[0].object.destroyByHit(scene, objs, key);
+    //       this.destroyByHit(scene, objs, key, asteroids);
+    //     }else if(collisionResults[0].object.objType === "player"){     
+    //       collisionResults[0].object.destroyByHit(scene, objs, key);
+    //       this.destroyByHit(scene, objs, key, asteroids);
+    //     }
+    //   }
+    // } 
   };
 
   destroyByHit(scene, objs, key, asteroids){

@@ -2,7 +2,7 @@
 class PlayerShot{
   constructor(xPos,yPos){
     let shotGeometry = new THREE.CylinderGeometry( 3, 3, 20, 64 );
-    this.playerShotObj = new Physijs.ConvexMesh(shotGeometry, playerShotMaterial);
+    this.playerShotObj = new Physijs.ConvexMesh(shotGeometry, playerShotMaterial, 1);
     this.playerShotObj.rotation.x = helperMethods.convertToRad(180)
     this.playerShotObj.scale.x = 2;
     this.playerShotObj.scale.y = 2;
@@ -13,7 +13,13 @@ class PlayerShot{
     this.playerShotObj.destroyByHit = this.destroyByHit;
     this.playerShotObj.clean = this.clean;
     collidableMeshList.push(this.playerShotObj);
-
+    this.playerShotObj._physijs.collision_flags = 4;
+    this.playerShotObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
+      if(other_object.objType !== 'background' && other_object.objType !== 'player'){
+        console.log('hit');
+      }
+        // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
+      });
     this.setVelocity = true;
   }
 

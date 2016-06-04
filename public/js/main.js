@@ -65,6 +65,7 @@ function start(){
   gameRunning = true;
   let planeGeometry = new THREE.PlaneGeometry( 497.5, window.innerHeight - 1);
   let plane = new THREE.Mesh( planeGeometry, loadedScene.planeMaterial );
+  plane.objType = 'background';
   plane.position.z = -10;
   scene.add(plane);
   player = new PlayerModel();

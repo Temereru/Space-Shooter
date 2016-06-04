@@ -43,6 +43,9 @@ class PlayerModel{
   }
 
   manage(scene, objs, key){
+    // if(this.playerObj._physijs.touches.length !== 0){
+    //   debugger;
+    // }
     let vel = this.playerObj.getLinearVelocity();
     if(this.direction.left){
       vel.x = (vel.x -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.x - this.speed);

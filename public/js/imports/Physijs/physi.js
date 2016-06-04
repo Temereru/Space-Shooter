@@ -620,7 +620,6 @@ window.Physijs = (function() {
 		 *
 		 * If you feel inclined to make this better, please do so.
 		 */
-
 		var i, j, offset, object, object2, id1, id2,
 			collisions = {}, normal_offsets = {};
 
@@ -645,7 +644,6 @@ window.Physijs = (function() {
 		for ( id1 in this._objects ) {
 			if ( !this._objects.hasOwnProperty( id1 ) ) continue;
 			object = this._objects[ id1 ];
-
 			// If object touches anything, ...
 			if ( collisions[ id1 ] ) {
 
@@ -660,7 +658,6 @@ window.Physijs = (function() {
 				for ( j = 0; j < collisions[ id1 ].length; j++ ) {
 					id2 = collisions[ id1 ][ j ];
 					object2 = this._objects[ id2 ];
-
 					if ( object2 ) {
 						// If object was not already touching object2, notify object
 						if ( object._physijs.touches.indexOf( id2 ) === -1 ) {
@@ -687,7 +684,6 @@ window.Physijs = (function() {
 									data[ normal_offset + 2 ]
 								);
 							}
-
 							object.dispatchEvent( 'collision', object2, _temp1, _temp2, _temp_vector3_1 );
 						}
 					}
