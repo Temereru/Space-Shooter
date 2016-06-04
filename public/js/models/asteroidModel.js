@@ -14,12 +14,12 @@ class AsteroidModel {
     this.asteroidObj.rotation.x = rot.x;
     this.asteroidObj.rotation.y = rot.y;
     this.asteroidObj.rotation.z = rot.z;
-    let vel = this.getVelocity();
-    this.asteroidObj.velocity = vel;
     this.asteroidObj.destroyByHit = this.destroyByHit;
     this.asteroidObj.objType = "asteroid";
     this.asteroidObj.key = helperMethods.getRand(1000000);
     asteroids.push(this.asteroidObj.key);
+
+    this.setVelocity = true;
   };
 
   getStartPos(){
@@ -36,7 +36,7 @@ class AsteroidModel {
   }
 
   getVelocity(){
-    return {x:0,y:helperMethods.getRand(3, 1),z:0};
+    return helperMethods.getRand(-100, -150);
   }
 
   clean(scene, objs, key, asteroids){
@@ -54,11 +54,13 @@ class AsteroidModel {
   }
 
   manage(scene, objs, key, asteroids){
-    this.asteroidObj.position.y -= this.asteroidObj.velocity.y;
-    this.asteroidObj.__dirtyPosition = true;
-    // if(this.asteroidObj.position.y <= -400){
-    //   this.clean(scene, objs, key, asteroids);
-    // }
+    if(this.setVelocity){
+      this.asteroidObj.setLinearVelocity(new THREE.Vector3(0, this.getVelocity(), 0));
+      this.setVelocity = false;
+    }
+    if(this.asteroidObj.position.y <= -400){
+      this.clean(scene, objs, key, asteroids);
+    }
 
     var originPoint = this.asteroidObj.position.clone();
     
