@@ -23,6 +23,7 @@ class PlayerModel{
     this.playerObj.destroyByHit = this.destroyByHit;
     this.playerObj.clean = this.clean;
     this.speed = 20;
+    this.playerObj.toDestroy = false;
     this.direction = {
       left: false,
       right: false,
@@ -30,6 +31,13 @@ class PlayerModel{
       down: false
     }
     this.drag = 1.05;
+    this.playerObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
+    if(other_object.objType == 'asteroid'){
+      this.toDestroy = true;
+      other_object.toDestroy = true;
+    }
+      // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
+    });
     callback(this, this.playerObj);
   }
 
@@ -43,9 +51,10 @@ class PlayerModel{
   }
 
   manage(scene, objs, key){
-    // if(this.playerObj._physijs.touches.length !== 0){
-    //   debugger;
-    // }
+    if(this.playerObj.toDestroy){
+      this.destroyByHit(scene, objs, key);
+      return;
+    }
     let vel = this.playerObj.getLinearVelocity();
     if(this.direction.left){
       vel.x = (vel.x -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.x - this.speed);
@@ -97,19 +106,7 @@ class PlayerModel{
 
   destroyByHit(scene, objs, key){
     this.clean(scene, objs, key);
-    for(let i = 0; i < collidableMeshList.length; i++){
-      if(collidableMeshList[i].uuid === this.uuid){
-        collidableMeshList.splice(i, 1);
-      }
-    }
     endGame(false);
-  }
-
-  addToCollision(other_object){
-      this.playerObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
-        console.log('hit');
-        // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
-      });
   };
 }
 

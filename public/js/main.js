@@ -4,7 +4,6 @@ let keyboard = new THREEx.KeyboardState();
 
 let loaded = false;
 let managedObjects = [];
-let collidableMeshList = [];
 let gameRunning = false;
 let score = 0;
 let asteroids = [];
@@ -49,15 +48,19 @@ function finishedLoading(){
 }
 
 function spawnWave(){
-  collidableMeshList = [];
-  collidableMeshList.push(player.playerObj);
-  for(let i = 0; i < 5; i++){
-    testAsteroid = new AsteroidModel();
-    addObjects(testAsteroid, testAsteroid.asteroidObj);
-  }
+  betweenWaves = false;
+  //for(let i = 0; i < 10; i++){
+  let spawner = setInterval(function(){
+      testAsteroid = new AsteroidModel();
+      addObjects(testAsteroid, testAsteroid.asteroidObj);
+    }, 500);
+  //}
+  setTimeout(function(){
+    console.log(spawner);
+    clearInterval(spawner);
+  }, 5000)
   waveNumber++;
   $('.wave').html('Wave ' + waveNumber)
-  betweenWaves = false;
 }
 
 function start(){
@@ -72,12 +75,12 @@ function start(){
   player.load(addObjects);
   spawnWave();
   render();
+  
 }
 
 function restart(){
   scene = new Physijs.Scene();
   managedObjects = [];
-  collidableMeshList = [];
   score = 0;
   asteroids = [];
   betweenWaves = false;
@@ -101,8 +104,14 @@ function render() {
     }else if(asteroids.length === 0 && !betweenWaves){
       betweenWaves = true;
       setTimeout(function(){
-        spawnWave();
-      }, 2000);
+        if(asteroids.length === 0){
+          setTimeout(function(){
+            spawnWave();
+          }, 1499);
+        }else{
+          betweenWaves = false;
+        }
+      }, 501)
     }
     $('.score').html('Score: ' + score);
     manageObjects();
@@ -113,26 +122,10 @@ function render() {
 }
 
 function manageKeyboard(){
-  if(keyboard.pressed('left')){
-    player.direction.left = true;
-  }else{
-    player.direction.left = false;
-  }
-  if(keyboard.pressed('right')){
-    player.direction.right = true;
-  }else{
-    player.direction.right = false;
-  }
-  if(keyboard.pressed('up')){
-    player.direction.up = true;
-  }else{
-    player.direction.up = false;
-  }
-  if(keyboard.pressed('down')){
-    player.direction.down = true;
-  }else{
-    player.direction.down = false;
-  }
+  player.direction.left = keyboard.pressed('left');
+  player.direction.right = keyboard.pressed('right');
+  player.direction.up = keyboard.pressed('up');
+  player.direction.down = keyboard.pressed('down');
   if(keyboard.pressed('ctrl')){
     if(shotCounter % 10 === 0 || shotCounter === 0){
       let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);

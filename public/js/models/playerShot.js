@@ -12,11 +12,13 @@ class PlayerShot{
     this.playerShotObj.objType = "playerShot";
     this.playerShotObj.destroyByHit = this.destroyByHit;
     this.playerShotObj.clean = this.clean;
-    collidableMeshList.push(this.playerShotObj);
     this.playerShotObj._physijs.collision_flags = 4;
+    this.playerShotObj.toDestroy = false;
     this.playerShotObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
-      if(other_object.objType !== 'background' && other_object.objType !== 'player'){
-        console.log('hit');
+      if(other_object.objType === 'asteroid'){
+        this.toDestroy = true;
+        other_object.toDestroy = true;
+        other_object.hit = true;
       }
         // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
       });
@@ -33,6 +35,10 @@ class PlayerShot{
   }
 
   manage(scene, objs, key){
+    if(this.playerShotObj.toDestroy){
+      this.clean(scene, objs, key);
+    }
+
     if(this.setVelocity){
       this.playerShotObj.setLinearVelocity(new THREE.Vector3(0, 400, 0));
       this.setVelocity = false;
