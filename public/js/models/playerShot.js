@@ -2,7 +2,7 @@
 class PlayerShot{
   constructor(xPos,yPos){
     let shotGeometry = new THREE.CylinderGeometry( 3, 3, 20, 64 );
-    this.playerShotObj = new Physijs.ConvexMesh(shotGeometry, playerShotMaterial, 1);
+    this.playerShotObj = new Physijs.ConvexMesh(shotGeometry, loadedShots.playerShotMaterial, 1);
     this.playerShotObj.rotation.x = helperMethods.convertToRad(180)
     this.playerShotObj.scale.x = 2;
     this.playerShotObj.scale.y = 2;
@@ -23,6 +23,8 @@ class PlayerShot{
         // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
       });
     this.setVelocity = true;
+    this.playerShotMusic = document.createElement('audio');
+    this.playerShotMusic.appendChild(loadedShots.playerShotMusicSource);
   }
 
   clean(scene, objs, key){

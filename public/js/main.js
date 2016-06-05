@@ -12,6 +12,9 @@ let waveNumber = 0;
 let firstRun = true;
 let shotCounter = 0;
 
+let bgMusic = document.createElement('audio');
+let bgDuration;
+
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight);
@@ -35,7 +38,11 @@ let player;
 let testAsteroid;
 
 function loadPlayer(){
-  playerLoader().load(loadScene);
+  playerLoader().load(loadShots);
+}
+
+function loadShots(){
+  shotsLoader().load(loadScene);
 }
 
 function loadScene(){
@@ -44,6 +51,7 @@ function loadScene(){
 
 function finishedLoading(){
   loaded = true;
+  bgMusic.appendChild(loadedScene.bgMusicSource);
   $('.loading-text').removeClass('show');
 }
 
@@ -56,7 +64,6 @@ function spawnWave(){
     }, 500);
   //}
   setTimeout(function(){
-    console.log(spawner);
     clearInterval(spawner);
   }, 5000)
   waveNumber++;
@@ -75,7 +82,15 @@ function start(){
   player.load(addObjects);
   spawnWave();
   render();
-  
+  bgDuration = bgMusic.duration * 1000;
+  bgMusic.currentTime = 0;
+  bgMusic.play();
+  let bgInterval = setInterval(function(){
+    if(gameRunning){
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+    }
+  }, bgDuration - 100);
 }
 
 function restart(){
@@ -130,6 +145,7 @@ function manageKeyboard(){
     if(shotCounter % 10 === 0 || shotCounter === 0){
       let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);
       addObjects(shotInstance, shotInstance.playerShotObj);
+      shotInstance.playerShotMusic.play();
     }
     shotCounter++;
   }else{
@@ -154,6 +170,7 @@ $(document).keydown(function (e) {
 
 function endGame(win){
   firstRun = false;
+  bgMusic.pause();
   if(win){
     gameRunning = false;
     $('.game-text').html('You Win');

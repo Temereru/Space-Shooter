@@ -25,6 +25,8 @@ class AsteroidModel {
     this.asteroidObj._physijs.collision_flags = 4;
     asteroids.push(this.asteroidObj.key);
     this.setVelocity = true;
+    this.asteoidExplosionMusic = document.createElement('audio');
+    this.asteoidExplosionMusic.appendChild(loadedAsteroids.asteroidExplosionMusicSource);
   };
 
   getStartPos(){
@@ -75,6 +77,7 @@ class AsteroidModel {
 
   destroyByHit(scene, objs, key, asteroids){
     this.clean(scene, objs, key, asteroids);
+    this.asteoidExplosionMusic.play();
     score += 10;
   }
 }

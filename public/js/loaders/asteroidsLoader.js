@@ -14,6 +14,8 @@ const asteroidLoader = function(){
         callback();
       });
     });
+    loadedAsteroids.asteroidExplosionMusicSource = document.createElement('source');
+    loadedAsteroids.asteroidExplosionMusicSource.src = '../../assets/audio/explosion_asteroid.wav';
   }
 
   return {
