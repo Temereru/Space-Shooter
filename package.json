@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/Temereru/Space-Shooter#readme",
   "dependencies": {
+    "body-parser": "^1.15.1",
     "express": "^4.13.4",
-    "jquery": "^2.2.4"
+    "express-jwt": "^3.4.0",
+    "jquery": "^2.2.4",
+    "jsonwebtoken": "^7.0.0",
+    "mongoose": "^4.4.20",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }
