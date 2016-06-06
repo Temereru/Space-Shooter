@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 
 var userSchema = new Schema({
   username: String,
+  scores: Array,
   password: String,
   salt: String
 });

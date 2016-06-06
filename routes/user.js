@@ -32,7 +32,6 @@ router.post('/register', function(req,res){
 passport.use('login', new LocalStrategy(function(username, password, done) {
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
-
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
@@ -46,13 +45,13 @@ passport.use('login', new LocalStrategy(function(username, password, done) {
 ));
 
 router.post('/login', function(req,res,next){
-  passport.authenticate('login', function(err, user){
+  passport.authenticate('login', function(err, user, error){
     if(err){ return next(err); }
-
     if (user) {
       return res.json({token: user.generateJWT()});
     } else {
-      return res.status(401);
+      res.status(401);
+      return res.send(error.message);
     }
   })(req, res, next);
 });

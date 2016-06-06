@@ -20,6 +20,7 @@
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "express-jwt": "^3.4.0",
+    "font-awesome": "^4.6.3",
     "jquery": "^2.2.4",
     "jsonwebtoken": "^7.0.0",
     "mongoose": "^4.4.20",

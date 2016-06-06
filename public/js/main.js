@@ -153,15 +153,23 @@ function manageKeyboard(){
   }
 }
 
-$(document).keydown(function (e) {
+function focusOnGame(){
+  if($('.register-form').hasClass('show') || $('.login-form').hasClass('show') || $('.logout-confirm').hasClass('show') || $('.logout-success').hasClass('show')){
+    return false;
+  }else{
+    return true;
+  }
+}
+
+$(document).on('keydown' , function (e) {
   switch(e.which){
     case 82:
-      if(!gameRunning){
+      if(!gameRunning && !firstRun){
         restart();
       };
       break;
     case 13:
-      if(!gameRunning && firstRun && loaded){
+      if(!gameRunning && firstRun && loaded && focusOnGame()){
         start();
       }
       break;

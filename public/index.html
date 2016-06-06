@@ -3,6 +3,7 @@
 <head>
   <title>Space Shooter</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -18,6 +19,37 @@
     <h4 class="second-line">Survive the waves of asteroids to win</h4>
   </div>
   <h1 class="loading-text show">Loading Assets</h1>
+  <div class="menu">
+    <h2 class="logged-user"></h2> 
+    <button class="register">Register</button>
+    <button class="login">Login</button>
+    <button class="logout">Logout</button>
+  </div>
+  <form class="register-form">
+    <h3>Register</h3>
+    <input class="username" type="text" placeholder="username"></input>
+    <input class="password" type="password" placeholder="password"></input>
+    <button>Register</button>
+    <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
+    <p class="error"></p>
+  </form>
+  <form class="login-form">
+    <h3>Login</h3>
+    <input class="username" type="text" placeholder="username"></input>
+    <input class="password" type="password" placeholder="password"></input>
+    <button>Login</button>
+    <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
+    <p class="error"></p>
+  </form>
+  <div class="logout-confirm">
+    <h3>Are you Sure you want to log out</h3>
+    <button>Log Out</button>
+    <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
+  </div>
+  <div class="logout-success">
+    <h2 class="message">Logout Successfull!</h2>
+    <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
+  </div>
 <script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="js/imports/three.js"></script>
 <script type="text/javascript" src="js/imports/Physijs/physi.js"></script>
@@ -35,5 +67,6 @@
 <script type="text/javascript" src="js/models/playerShot.js"></script>
 <script type="text/javascript" src="js/models/asteroidModel.js"></script>
 <script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/stuffManager.js"></script>
 </body>
 </html>
