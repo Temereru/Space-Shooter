@@ -93,13 +93,13 @@ class PlayerModel{
 
     
     vel = this.playerObj.getLinearVelocity();
-    if(((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0))&&((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0))){
+    if(((this.playerObj.position.y >= 290 && vel.y > 0) || (this.playerObj.position.y <= -290 && vel.y < 0))&&((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0))){
       this.playerObj.setLinearVelocity(new THREE.Vector3(0, 0, vel.z));
     }
-    else if((this.playerObj.position.y >= 290 && vel.y > 0)|| (this.playerObj.position.y <= -290 && vel.y < 0)){
+    else if((this.playerObj.position.y >= 290 && vel.y > 0) || (this.playerObj.position.y <= -290 && vel.y < 0)){
       this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 0, vel.z));
     }
-    else if((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0)){
+    else if((this.playerObj.position.x <= -210 && vel.x < 0) || (this.playerObj.position.x >= 210 && vel.x > 0)){
       this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
     }
   }
