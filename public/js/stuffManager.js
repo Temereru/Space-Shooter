@@ -114,8 +114,8 @@ const getUserScores = function(){
 }
 
 const displayUserScores = function(){
-  for(let i = 2; i <= userScores.length+1; i++){
-    $('.user-scores .score-list tr:nth-child('+i+') td:nth-child(2)').html(userScores[i-2]);
+  for(let i = 2; i <= 11; i++){
+    $('.user-scores .score-list tr:nth-child('+i+') td:nth-child(2)').html(userScores[i-2] || 0);
   }
 }
 
