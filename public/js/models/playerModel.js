@@ -31,6 +31,7 @@ class PlayerModel{
       down: false
     }
     this.drag = 1.05;
+    this.speedMult = 10;
     this.playerObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
     if(other_object.objType == 'asteroid'){
       this.toDestroy = true;
@@ -56,56 +57,81 @@ class PlayerModel{
       this.destroyByHit(scene, objs, key);
       return;
     }
+    // let vel = this.playerObj.getLinearVelocity();
+    // if(this.direction.left){
+    //   vel.x = (vel.x -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.x - this.speed);
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+    // }else if(!this.direction.right && vel.x < 0){
+    //   let delta = (vel.x / this.drag) < -5 ? (vel.x / this.drag) : 0;
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
+    // }
+
+    // vel = this.playerObj.getLinearVelocity();
+    // if(this.direction.right){
+    //   vel.x = (vel.x += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.x + this.speed);
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+    // }else if(!this.direction.left && vel.x > 0){
+    //   let delta = (vel.x / this.drag) > 5 ? (vel.x / this.drag) : 0;
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
+    // }
+
+    // vel = this.playerObj.getLinearVelocity();
+    // if(this.direction.up){
+    //   vel.y = (vel.y += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.y + this.speed);
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+    // }else if(!this.direction.down && vel.y > 0){
+    //   let delta = (vel.y / this.drag) > 5 ? (vel.y / this.drag) : 0;
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
+    // }
+
+    // vel = this.playerObj.getLinearVelocity();
+    // if(this.direction.down){
+    //   vel.y = (vel.y -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.y - this.speed);
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+    // }else if(!this.direction.up && vel.y < 0){
+    //   let delta = (vel.y / this.drag) < -5 ? (vel.y / this.drag) : 0;
+    //   this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
+    // }
     let vel = this.playerObj.getLinearVelocity();
     if(this.direction.left){
-      vel.x = (vel.x -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.x - this.speed);
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      vel.x = (vel.x -= this.speed) <= (-this.speedMult * this.speed) ? (-this.speedMult * this.speed) : (vel.x - this.speed);
     }else if(!this.direction.right && vel.x < 0){
-      let delta = (vel.x / this.drag) < -5 ? (vel.x / this.drag) : 0;
-      this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
+      vel.x = (vel.x / this.drag) < -this.speedMult ? (vel.x / this.drag) : 0;
     }
 
-    vel = this.playerObj.getLinearVelocity();
     if(this.direction.right){
-      vel.x = (vel.x += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.x + this.speed);
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      vel.x = (vel.x += this.speed) >= (this.speedMult * this.speed) ? (this.speedMult * this.speed) : (vel.x + this.speed);
     }else if(!this.direction.left && vel.x > 0){
-      let delta = (vel.x / this.drag) > 5 ? (vel.x / this.drag) : 0;
-      this.playerObj.setLinearVelocity(new THREE.Vector3(delta, vel.y, vel.z));
+      vel.x = (vel.x / this.drag) > this.speedMult ? (vel.x / this.drag) : 0;
     }
 
-    vel = this.playerObj.getLinearVelocity();
     if(this.direction.up){
-      vel.y = (vel.y += this.speed) >= (5 * this.speed) ? (5 * this.speed) : (vel.y + this.speed);
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      vel.y = (vel.y += this.speed) >= (this.speedMult * this.speed) ? (this.speedMult * this.speed) : (vel.y + this.speed);
     }else if(!this.direction.down && vel.y > 0){
-      let delta = (vel.y / this.drag) > 5 ? (vel.y / this.drag) : 0;
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
+      vel.y = (vel.y / this.drag) > this.speedMult ? (vel.y / this.drag) : 0;
     }
 
-    vel = this.playerObj.getLinearVelocity();
     if(this.direction.down){
-      vel.y = (vel.y -= this.speed) <= (-5 * this.speed) ? (-5 * this.speed) : (vel.y - this.speed);
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
+      vel.y = (vel.y -= this.speed) <= (-this.speedMult * this.speed) ? (-this.speedMult * this.speed) : (vel.y - this.speed);
     }else if(!this.direction.up && vel.y < 0){
-      let delta = (vel.y / this.drag) < -5 ? (vel.y / this.drag) : 0;
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, delta, vel.z));
+      vel.y = (vel.y / this.drag) < -this.speedMult ? (vel.y / this.drag) : 0;
     }
-
     
-    vel = this.playerObj.getLinearVelocity();
     if(((this.playerObj.position.y >= 290 && vel.y > 0) || (this.playerObj.position.y <= -290 && vel.y < 0))&&((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0))){
-      this.playerObj.setLinearVelocity(new THREE.Vector3(0, 0, vel.z));
+      vel.x = 0;
+      vel.y = 0;
     }
     else if((this.playerObj.position.y >= 290 && vel.y > 0) || (this.playerObj.position.y <= -290 && vel.y < 0)){
-      this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, 0, vel.z));
+      vel.y = 0;
     }
     else if((this.playerObj.position.x <= -210 && vel.x < 0) || (this.playerObj.position.x >= 210 && vel.x > 0)){
-      this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
+      vel.x = 0;
     }
+    console.log(vel);
+    this.playerObj.setLinearVelocity(new THREE.Vector3(vel.x, vel.y, vel.z));
 
     vel = this.playerObj.getLinearVelocity();
-    this.playerObj.rotation.z = helperMethods.convertToRad(180 + (vel.x * (4.5 / 10)));
+    this.playerObj.rotation.z = helperMethods.convertToRad(180 + (vel.x * (45 / (this.speed * this.speedMult))));
     // console.log(this.playerObj._physijs.rotation.y);
     // this.playerObj.__dirtyRotation = true;
     // console.log(this.playerObj._physijs.__dirtyRotation);

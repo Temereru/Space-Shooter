@@ -42,7 +42,7 @@ class PlayerShot{
     }
 
     if(this.setVelocity){
-      this.playerShotObj.setLinearVelocity(new THREE.Vector3(0, 400, 0));
+      this.playerShotObj.setLinearVelocity(new THREE.Vector3(0, 600, 0));
       this.setVelocity = false;
     }
 

@@ -75,7 +75,7 @@ router.post('/score/:id', auth, function(req, res, next){
     var tempArr = [];
     var lowest = req.body.score;
     for(var i = 0; i < user.scores.length; i++){
-      if(user.scores[i] > lowest){
+      if(parseInt(user.scores[i]) > parseInt(lowest)){
         tempArr.push(user.scores[i]);
       }else{
         tempArr.push(lowest);
@@ -91,7 +91,7 @@ router.post('/score/:id', auth, function(req, res, next){
           var tempArr = [];
           var lowest = {user: user.username, score:req.body.score};
           for(var j = 0; j < game.scoreBoard.length; j++){
-            if(game.scoreBoard[j].score >= lowest.score){
+            if(parseInt(game.scoreBoard[j].score) > parseInt(lowest.score)){
               tempArr.push(game.scoreBoard[j]);
             }else{
               tempArr.push(lowest);
