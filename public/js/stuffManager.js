@@ -187,6 +187,7 @@ const setLoggedOut = function(){
 
 $('.menu .register').on('click', function(e){
   $('.login-form').removeClass('show');
+  $('.logout-success').removeClass('show');
   $('.register-form').addClass('show');
 });
 
@@ -201,6 +202,7 @@ $('.register-form').on('submit', function(e){
 
 $('.menu .login').on('click', function(e){
   $('.register-form').removeClass('show');
+  $('.logout-success').removeClass('show');
   $('.login-form').addClass('show');
 });
 
