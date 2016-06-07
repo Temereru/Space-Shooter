@@ -7,6 +7,8 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/userModel');
 
+var auth = expressJWT({secret: 'ravenclaw'});
+
 router.post('/register', function(req,res){
   User.findOne({username: req.body.username}, function(err, user){
     if (err) { return done(err); }
@@ -16,6 +18,9 @@ router.post('/register', function(req,res){
 
         user.username = req.body.username;
         user.setPassword(req.body.password);
+        for(var i = 0; i < 10; i++){
+          user.scores.push(0);
+        }
 
         user.save(function (err){
           if(err){ return next(err); }
@@ -55,5 +60,45 @@ router.post('/login', function(req,res,next){
     }
   })(req, res, next);
 });
+
+router.post('/score/:id', auth, function(req, res, next){
+  User.findById(req.params.id, function(err, user){
+    if(err) {return next(err)}
+
+    if(!user){
+      res.status(401);
+      return res.send('User ID do not match');
+    }
+
+    var tempArr = [];
+    var lowest = req.body.score;
+    for(var i = 0; i < user.scores.length; i++){
+      if(user.scores[i] > lowest){
+        tempArr.push(user.scores[i]);
+      }else{
+        tempArr.push(lowest);
+        lowest = user.scores[i];
+      }
+    }
+    user.scores = tempArr;
+    user.save(function(err, user){
+      return res.send(user.scores);
+    });
+  })
+})
+
+router.get('/score/:id', auth, function(req, res, next){
+  User.findById(req.params.id, function(err, user){
+    if(err) {return next(err)}
+
+    if(!user){
+      res.status(401);
+      return res.send('User ID do not match');
+    }
+
+    res.send(user.scores);
+
+  })
+})
 
 module.exports = router;

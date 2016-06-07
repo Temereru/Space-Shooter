@@ -19,30 +19,16 @@ canvas {
   z-index: 10;
 }
 
-.overlay .lose {
-  color: white;
-  position: absolute;
-  left: 40%;
-  top: 35%;
-}
-
-.overlay .win {
-  color: white;
-  position: absolute;
-  left: 45%;
-  top: 35%;
-}
-
 .overlay h4 {
-  color: white;
-  position: absolute;
-  left: 45%;
-  top: 40%;
+  color: #00cc00;
+  text-align: center;
+  margin-top: 47vh;
+  font-size: 1.7em;
 }
 
 .score {
   position: absolute;
-  color: white;
+  color: #00cc00;
   left: 5%;
   top: 5%;
   z-index: 11;
@@ -50,7 +36,7 @@ canvas {
 
 .wave {
   position: absolute;
-  color: white;
+  color: #00cc00;
   left: 5%;
   top: 10%;
   z-index: 11;
@@ -184,11 +170,12 @@ canvas {
   cursor: pointer;
 }
 
-.register-form button:focus, .register-form input:focus, .menu button:focus, .login button:focus, .login-form input:focus { 
+.register-form button:focus, .register-form input:focus, .menu button:focus,
+.login-form button:focus, .login-form input:focus, .submit-score button:focus { 
   outline: none;
 }
 
-.register-form .close, .login-form .close, .logout-confirm .close, .logout-success .close{
+.register-form .close, .login-form .close, .logout-confirm .close, .logout-success .close, .submit-score .close{
   position: absolute;
   right: 0;
   top: 0;
@@ -202,7 +189,7 @@ canvas {
   font-weight: bold;
 }
 
-.logout-confirm {
+.logout-confirm, .submit-score {
   border: 2px solid #00ff00;
   background-color: rgba(0, 51, 0, 1);
   z-index: 20;
@@ -214,7 +201,12 @@ canvas {
   height:24vh;
 }
 
-.logout-confirm h3 {
+.submit-score {
+  height: 28vh;
+  top: 36vh;
+}
+
+.logout-confirm h3, .submit-score h3 {
   color: #00cc00;
   margin-left: auto;
   margin-right: auto;
@@ -225,7 +217,7 @@ canvas {
   text-align: center;
 }
 
-.logout-confirm button {
+.logout-confirm button, .submit-score button {
   margin-top: 30px;
   width: 10vw;
   margin-left: 7vw;
@@ -259,7 +251,79 @@ canvas {
   text-align: center;
 }
 
+.submit-score h3 {
+  font-size: 1.7em;
+}
+
+.submit-score p {
+  text-align: center;
+  color: #00cc00;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.submit-score button {
+  margin-top: 10px;
+}
+
+.scoreboards {
+  position: absolute;
+  left: 10px;
+  top: 25vh;
+  width: 250px;
+  z-index: 20;
+}
+
+.highest-scores, .user-scores {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 100%;
+  border: 2px solid #009900;
+  background-color: rgba(0, 230, 0, 0.5);
+  border-radius: 20px;
+  float: left;
+}
+
+.highest-scores h3, .user-scores h3 {
+  text-align: center;
+  color: #00cc00;
+  cursor: pointer;
+}
+
+.score-list {
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 5%;
+  border: 2px solid #009900;
+  display: none;
+  border-spacing: 0;
+}
+
+.score-list tr{
+  width: 100%;
+  border: none;
+}
+
+.score-list tr:nth-child(odd){
+  background-color: #00b300;
+}
+
+.score-list tr:nth-child(even){
+  background-color: #1aff1a;
+}
+
+.score-list td, .score-list th {
+  padding: 0;
+  text-align: center;
+  color:; 
+}
 
 .show {
   display: block !important;
+}
+
+.show-table {
+  display: table !important;
 }

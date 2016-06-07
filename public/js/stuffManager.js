@@ -1,3 +1,4 @@
+let userScores = [];
 
 const onLoad = function(){
   if(getToken()){
@@ -5,6 +6,7 @@ const onLoad = function(){
   }else{
     setLoggedOut();
   }
+  let enableScoreSubmit = false;
 }
 
 const register = function(){
@@ -17,20 +19,20 @@ const register = function(){
   }
 
   $.ajax({
-         method: "POST",
-         url: '/user/register',
-         dataType: "json",
-         data: user,
-         success: function(data) {
-            _setJWT(data.token);
-            setLoggedIn();
-         },
-         error: function(jqXHR, textStatus, errorThrown) {
-            if(jqXHR.responseText === 'Username already in use.'){
-              $('.register-form .error').text(jqXHR.responseText);
-            };
-         }
-      });
+     method: "POST",
+     url: '/user/register',
+     dataType: "json",
+     data: user,
+     success: function(data) {
+        _setJWT(data.token);
+        setLoggedIn();
+     },
+     error: function(jqXHR, textStatus, errorThrown) {
+        if(jqXHR.responseText === 'Username already in use.'){
+          $('.register-form .error').text(jqXHR.responseText);
+        };
+     }
+  });
 }
 
 const login = function(){
@@ -44,20 +46,20 @@ const login = function(){
   }
 
   $.ajax({
-         method: "POST",
-         url: '/user/login',
-         dataType: "json",
-         data: user,
-         success: function(data) {
-            _setJWT(data.token);
-            setLoggedIn();
-         },
-         error: function(jqXHR, textStatus, errorThrown) {
-            if(jqXHR.responseText === 'Incorrect username.' || jqXHR.responseText === 'Incorrect password.'){
-              $('.login-form .error').text(jqXHR.responseText);
-            };
-         }
-      });
+     method: "POST",
+     url: '/user/login',
+     dataType: "json",
+     data: user,
+     success: function(data) {
+        _setJWT(data.token);
+        setLoggedIn();
+     },
+     error: function(jqXHR, textStatus, errorThrown) {
+        if(jqXHR.responseText === 'Incorrect username.' || jqXHR.responseText === 'Incorrect password.'){
+          $('.login-form .error').text(jqXHR.responseText);
+        };
+     }
+  });
 }
 
 const logout = function(){
@@ -67,6 +69,56 @@ const logout = function(){
   $('.logout-success').addClass('show');
 }
 
+const sendScore = function(){
+  let token = getToken();
+  let header = 'Bearer ' + token;
+  let headers = {Authorization: header}
+  let userId = getUserId();
+  let scoreObj = {score: score};
+  $.ajax({
+     method: "POST",
+     url: '/user/score/' + userId,
+     dataType: "json",
+     data: scoreObj,
+     headers: headers,
+     success: function(data) {
+        userScores = data;
+        displayUserScores();
+        enableScoreSubmit = false;
+        $('.submit-score .message').text('Successfully submited score');
+     },
+     error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+     }
+  });
+}
+
+const getUserScores = function(){
+  let token = getToken();
+  let header = 'Bearer ' + token;
+  let headers = {Authorization: header}
+  let userId = getUserId();
+  $.ajax({
+     method: "GET",
+     url: '/user/score/' + userId,
+     dataType: "json",
+     headers: headers,
+     success: function(data) {
+        userScores = data;
+        displayUserScores();
+     },
+     error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR);
+     }
+  });
+}
+
+const displayUserScores = function(){
+  for(let i = 2; i <= userScores.length+1; i++){
+    $('.user-scores .score-list tr:nth-child('+i+') td:nth-child(2)').html(userScores[i-2]);
+  }
+}
+
 const _setJWT = function(token){
   localStorage['JWT'] = token;
 };
@@ -74,6 +126,11 @@ const _setJWT = function(token){
 const _clearJWT = function(){
   localStorage.removeItem('JWT');
 };
+
+const getUserId = function(){
+  let user = parseToken();
+  return user._id;
+}
 
 const getToken = function(){ 
   return localStorage['JWT'];
@@ -106,6 +163,7 @@ const setLoggedIn = function(){
   $('.menu .register').removeClass('show');
   $('.menu .login').removeClass('show');
   $('.menu .logout').addClass('show');
+  getUserScores();
 }
 
 const setLoggedOut = function(){
@@ -113,6 +171,8 @@ const setLoggedOut = function(){
   $('.menu .register').addClass('show');
   $('.menu .login').addClass('show');
   $('.menu .logout').removeClass('show');
+  userScores = [];
+  displayUserScores();
 }
 
 $('.menu .register').on('click', function(e){
@@ -157,6 +217,32 @@ $('.logout-confirm').on('click', 'button', function(e){
 
 $('.logout-success').on('click', '.close', function(e){
   $('.logout-success').removeClass('show');
+});
+
+$('.submit-score').on('click', '.close', function(e){
+  $('.submit-score').removeClass('show');
+  $('.submit-score .message').text('');
+});
+
+$('.submit-score').on('click', 'button', function(e){
+  e.preventDefault();
+  if(enableScoreSubmit){
+    sendScore();
+  }
+});
+
+$('.highest-scores').on('click', 'h3', function(e){
+  $('.highest-scores .score-list').toggleClass('show-table');
+  if($('.user-scores .score-list').hasClass('show-table')){
+    $('.user-scores .score-list').removeClass('show-table')
+  }
+});
+
+$('.user-scores').on('click', 'h3', function(e){
+    $('.user-scores .score-list').toggleClass('show-table');
+  if($('.highest-scores .score-list').hasClass('show-table')){
+    $('.highest-scores .score-list').removeClass('show-table')
+  }
 });
 
 onLoad();

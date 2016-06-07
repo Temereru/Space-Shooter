@@ -154,7 +154,8 @@ function manageKeyboard(){
 }
 
 function focusOnGame(){
-  if($('.register-form').hasClass('show') || $('.login-form').hasClass('show') || $('.logout-confirm').hasClass('show') || $('.logout-success').hasClass('show')){
+  if($('.register-form').hasClass('show') || $('.login-form').hasClass('show') || $('.logout-confirm').hasClass('show') 
+    || $('.logout-success').hasClass('show') || $('.submit-score').hasClass('show')){
     return false;
   }else{
     return true;
@@ -164,7 +165,7 @@ function focusOnGame(){
 $(document).on('keydown' , function (e) {
   switch(e.which){
     case 82:
-      if(!gameRunning && !firstRun){
+      if(!gameRunning && !firstRun && focusOnGame()){
         restart();
       };
       break;
@@ -181,13 +182,14 @@ function endGame(win){
   bgMusic.pause();
   if(win){
     gameRunning = false;
-    $('.game-text').html('You Win');
-    $('.game-text').addClass('win');
+    $('.submit-score .title').text('You Win!');
     $('.overlay').addClass('show');
   }else{
     gameRunning = false;
-    $('.game-text').html('Game Over! You Lose');
-    $('.game-text').addClass('lose');
-    $('.overlay').addClass('show');
+    $('.submit-score .title').html('Game Over!');
   }
+  $('.submit-score .score-text').text('Your final score is: ' + score);
+  enableScoreSubmit = true;
+  $('.overlay').addClass('show');
+  $('.submit-score').addClass('show');
 }
