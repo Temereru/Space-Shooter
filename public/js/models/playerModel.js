@@ -38,6 +38,7 @@ class PlayerModel{
     }
       // `this` has collided with `other_object` with an impact this.speed of `relative_velocity` and a rotational force of `relative_rotation` and at normal `contact_normal`
     });
+    console.log(this.playerObj);
     callback(this, this.playerObj);
   }
 
@@ -102,6 +103,12 @@ class PlayerModel{
     else if((this.playerObj.position.x <= -210 && vel.x < 0) || (this.playerObj.position.x >= 210 && vel.x > 0)){
       this.playerObj.setLinearVelocity(new THREE.Vector3(0, vel.y, vel.z));
     }
+
+    vel = this.playerObj.getLinearVelocity();
+    this.playerObj.rotation.z = helperMethods.convertToRad(180 + (vel.x * (4.5 / 10)));
+    // console.log(this.playerObj._physijs.rotation.y);
+    // this.playerObj.__dirtyRotation = true;
+    // console.log(this.playerObj._physijs.__dirtyRotation);
   }
 
   destroyByHit(scene, objs, key){

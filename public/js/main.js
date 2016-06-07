@@ -122,6 +122,7 @@ function render() {
         }else{
           betweenWaves = false;
         }
+      }, 501);
     }else if(asteroids.length === 0 && !betweenWaves){
       betweenWaves = true;
       setTimeout(function(){

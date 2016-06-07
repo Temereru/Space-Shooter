@@ -256,7 +256,6 @@ $('.user-scores').on('click', 'h3', function(e){
 });
 
 socket.on('scores', function (data) {
-  console.log(data);
   highestScores = data;
   displayHighestScores();
 }); 
