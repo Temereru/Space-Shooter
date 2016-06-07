@@ -1,3 +1,4 @@
+//module for loading all Shots related models, textures and sound files
 let shotTextureLoader = new THREE.TextureLoader();
 
 const loadedShots = {};

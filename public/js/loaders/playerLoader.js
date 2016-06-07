@@ -1,3 +1,4 @@
+//module for loading all player related models and textures
 var playerJsonLoader = new THREE.JSONLoader();
 var playerTextureLoader = new THREE.TextureLoader();
 
@@ -14,6 +15,8 @@ const playerLoader = function(){
         callback();
       });
     });
+    loadedPlayer.playerDestroyMusicSource = document.createElement('source');
+    loadedPlayer.playerDestroyMusicSource.src = '../../assets/audio/explosion_player.wav';
   }
 
   return {

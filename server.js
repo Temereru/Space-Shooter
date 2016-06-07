@@ -1,7 +1,6 @@
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var expressJWT = require('express-jwt');
 
 var User = require('./models/userModel');
 var Game = require('./models/gameModel');
@@ -9,8 +8,6 @@ var userRoutes = require('./routes/user');
 var serverDef = require('./serverDef');
 
 mongoose.connect('mongodb://localhost/space-shooter');
-
-var auth = expressJWT({secret: 'ravenclaw'});
 
 serverDef.app.use(bodyParser.json());
 serverDef.app.use(bodyParser.urlencoded({extended: false}));
