@@ -155,7 +155,7 @@ function manageKeyboard(){
 
 function focusOnGame(){
   if($('.register-form').hasClass('show') || $('.login-form').hasClass('show') || $('.logout-confirm').hasClass('show') 
-    || $('.logout-success').hasClass('show') || $('.submit-score').hasClass('show')){
+    || $('.logout-success').hasClass('show') || $('.submit-score').hasClass('show') || getToken() === undefined){
     return false;
   }else{
     return true;
