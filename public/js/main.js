@@ -144,12 +144,8 @@ function render() {
 }
 
 function manageKeyboard(){
-  player.direction.left = keyboard.pressed('left');
-  player.direction.right = keyboard.pressed('right');
-  player.direction.up = keyboard.pressed('up');
-  player.direction.down = keyboard.pressed('down');
-  if(keyboard.pressed('ctrl')){
-    if(shotCounter % 10 === 0 || shotCounter === 0){
+  if(keyboard.pressed('space')){
+    if(shotCounter % 20 === 0 || shotCounter === 0){
       let shotInstance = new PlayerShot(player.playerObj.position.x, player.playerObj.position.y + 10);
       addObjects(shotInstance, shotInstance.playerShotObj);
       shotInstance.playerShotMusic.play();
@@ -158,6 +154,20 @@ function manageKeyboard(){
   }else{
     shotCounter = 0;
   }
+  if(keyboard.pressed('left+right')){
+    player.direction.left = false;
+    player.direction.right = false;
+  }else{
+    player.direction.left = keyboard.pressed('left');
+    player.direction.right = keyboard.pressed('right');
+  }
+  if(keyboard.pressed('up+down')){
+    player.direction.up = false;
+    player.direction.down = false;
+  }else{
+    player.direction.up = keyboard.pressed('up');
+    player.direction.down = keyboard.pressed('down');
+  } 
 }
 
 function focusOnGame(){

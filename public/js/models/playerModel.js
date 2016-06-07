@@ -72,7 +72,7 @@ class PlayerModel{
       vel.x = (vel.x -= this.speed) <= (-this.speedMult * this.speed) ? (-this.speedMult * this.speed) : (vel.x - this.speed);
     }else if(!this.direction.right && vel.x < 0){//if the left and right keys are not pressed, and the player is moving
       //divides the velocity.x by the drag, making the player stop gradually
-      vel.x = (vel.x / this.drag) < -this.speedMult ? (vel.x / this.drag) : 0;
+      vel.x = (vel.x / this.drag) < -0.5 ? (vel.x / this.drag) : 0;
     }
     //if the right key is pressed
     if(this.direction.right){
@@ -80,7 +80,7 @@ class PlayerModel{
       vel.x = (vel.x += this.speed) >= (this.speedMult * this.speed) ? (this.speedMult * this.speed) : (vel.x + this.speed);
     }else if(!this.direction.left && vel.x > 0){//if the right and left keys are not pressed, and the player is moving
       //divides the velocity.x by the drag, making the player stop gradually
-      vel.x = (vel.x / this.drag) > this.speedMult ? (vel.x / this.drag) : 0;
+      vel.x = (vel.x / this.drag) > 0.5 ? (vel.x / this.drag) : 0;
     }
     //if the up key is pressed
     if(this.direction.up){
@@ -88,7 +88,7 @@ class PlayerModel{
       vel.y = (vel.y += this.speed) >= (this.speedMult * this.speed) ? (this.speedMult * this.speed) : (vel.y + this.speed);
     }else if(!this.direction.down && vel.y > 0){//if the up and down keys are not pressed, and the player is moving
       //divides the velocity.y by the drag, making the player stop gradually
-      vel.y = (vel.y / this.drag) > this.speedMult ? (vel.y / this.drag) : 0;
+      vel.y = (vel.y / this.drag) > 0.5 ? (vel.y / this.drag) : 0;
     }
     //if the down key is pressed
     if(this.direction.down){
@@ -96,7 +96,7 @@ class PlayerModel{
       vel.y = (vel.y -= this.speed) <= (-this.speedMult * this.speed) ? (-this.speedMult * this.speed) : (vel.y - this.speed);
     }else if(!this.direction.up && vel.y < 0){//if the down and up keys are not pressed, and the player is moving
       //divides the velocity.y by the drag, making the player stop gradually
-      vel.y = (vel.y / this.drag) < -this.speedMult ? (vel.y / this.drag) : 0;
+      vel.y = (vel.y / this.drag) < -0.5 ? (vel.y / this.drag) : 0;
     }
     //if the player reaches the limit on one of the axes, or both, stop it's movement in the corresponding axis or axes
     if(((this.playerObj.position.y >= 290 && vel.y > 0) || (this.playerObj.position.y <= -290 && vel.y < 0))&&((this.playerObj.position.x <= -210 && vel.x < 0)||(this.playerObj.position.x >= 210 && vel.x > 0))){
