@@ -115,7 +115,13 @@ var manageObjects = function(){
 function render() {
   if(gameRunning){
     if(asteroids.length === 0 && waveNumber === 10 && !betweenWaves){
-      endGame(true);
+      betweenWaves = true;
+      setTimeout(function(){
+        if(asteroids.length === 0){
+          endGame(true);
+        }else{
+          betweenWaves = false;
+        }
     }else if(asteroids.length === 0 && !betweenWaves){
       betweenWaves = true;
       setTimeout(function(){

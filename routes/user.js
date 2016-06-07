@@ -2,10 +2,12 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var expressJWT = require('express-jwt');
+var serverDef = require('../serverDef');
 
 var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/userModel');
+var Game = require('../models/gameModel');
 
 var auth = expressJWT({secret: 'ravenclaw'});
 
@@ -82,7 +84,28 @@ router.post('/score/:id', auth, function(req, res, next){
     }
     user.scores = tempArr;
     user.save(function(err, user){
-      return res.send(user.scores);
+      Game.findOne({name: 'single'}, function(err, game){
+        if(err) {return next(err)}
+
+        if(game){
+          var tempArr = [];
+          var lowest = {user: user.username, score:req.body.score};
+          for(var j = 0; j < game.scoreBoard.length; j++){
+            if(game.scoreBoard[j].score >= lowest.score){
+              tempArr.push(game.scoreBoard[j]);
+            }else{
+              tempArr.push(lowest);
+              lowest = game.scoreBoard[j];
+            }
+          }
+          game.scoreBoard = tempArr;
+          game.save(function(err, game){
+            serverDef.io.emit('scores', game.scoreBoard);
+            return res.send(user.scores);
+          });
+        }
+      });
+      
     });
   })
 })

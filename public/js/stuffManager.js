@@ -1,4 +1,6 @@
+let socket = io.connect('http://localhost:8082');
 let userScores = [];
+let highestScores = [];
 
 const onLoad = function(){
   if(getToken()){
@@ -7,6 +9,7 @@ const onLoad = function(){
     setLoggedOut();
   }
   let enableScoreSubmit = false;
+  $('.highest-scores .score-list').toggleClass('show-table');
 }
 
 const register = function(){
@@ -116,6 +119,13 @@ const getUserScores = function(){
 const displayUserScores = function(){
   for(let i = 2; i <= 11; i++){
     $('.user-scores .score-list tr:nth-child('+i+') td:nth-child(2)').html(userScores[i-2] || 0);
+  }
+}
+
+const displayHighestScores = function(){
+  for(let i = 2; i <= 11; i++){
+    $('.highest-scores .score-list tr:nth-child('+i+') td:nth-child(2)').html(highestScores[i-2].user || '');
+    $('.highest-scores .score-list tr:nth-child('+i+') td:nth-child(3)').html(highestScores[i-2].score || 0);
   }
 }
 
@@ -244,5 +254,11 @@ $('.user-scores').on('click', 'h3', function(e){
     $('.highest-scores .score-list').removeClass('show-table')
   }
 });
+
+socket.on('scores', function (data) {
+  console.log(data);
+  highestScores = data;
+  displayHighestScores();
+}); 
 
 onLoad();
