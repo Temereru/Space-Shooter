@@ -36,4 +36,4 @@ serverDef.io.on('connection', function(socket){
 
 serverDef.app.listen(8081);
 serverDef.server.listen(8082);
-serverDef.io.listen(serverDef.server);
+// serverDef.io.listen(serverDef.server);
