@@ -102,10 +102,11 @@ class AsteroidModel {
       this.clean(scene, objs, key, asteroids);
     }
   };
-  //manages the destruction of the asteroid if it was hit
+  //manages the destruction of the asteroid if it was hit, and set the new score
   destroyByHit(scene, objs, key, asteroids){
     this.clean(scene, objs, key, asteroids);
     this.asteroidExplosionMusic.play();
     score += 10;
+    displayScore();
   }
 }
