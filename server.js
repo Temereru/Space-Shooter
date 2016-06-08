@@ -33,7 +33,5 @@ serverDef.io.on('connection', function(socket){
   //   game.save(function(){});
   // }
 
-
-serverDef.app.listen(8081);
-serverDef.server.listen(8082);
+serverDef.server.listen(8081);
 // serverDef.io.listen(serverDef.server);
