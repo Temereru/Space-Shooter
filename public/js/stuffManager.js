@@ -1,5 +1,5 @@
 //creates a link to the web socket
-let socket = io.connect('http://localhost:8082');
+let socket = io.connect();
 
 //initilize the score lists to an empty array
 let userScores = [];
