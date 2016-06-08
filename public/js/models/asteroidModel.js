@@ -31,8 +31,8 @@ class AsteroidModel {
     this.asteroidObj.add(this.sphere);
     //set the collision flags so that the asteroid won't have physical collision effects
     this.asteroidObj._physijs.collision_flags = 4;
-    //add the asteroid to the asteroid list, used to detect wave endings and game ending
-    asteroids.push(this.asteroidObj.key);
+    //add the asteroid to the enemies list, used to detect wave endings and game ending
+    enemyArr.push(this.asteroidObj.key);
     //if true, the manage function will set the asteroid velocity
     this.setVelocity = true;
     //if true, the manage function will set the asteroid angular velocity
@@ -54,10 +54,7 @@ class AsteroidModel {
     let z = helperMethods.getRand(360);
     return new THREE.Euler( helperMethods.convertToRad(x),helperMethods.convertToRad(y),helperMethods.convertToRad(z), 'XYZ' );
   }
-  //return a randomized velocity.y value
-  getVelocity(){
-    return helperMethods.getRand(-100, -150);
-  }
+
   //return a Vector3 with random values
   getRandTumble(){
     let x = helperMethods.getRand(3, -3);
@@ -67,30 +64,30 @@ class AsteroidModel {
     return vector;
   }
   //removes references to the asteroid
-  clean(scene, objs, key, asteroids){
+  clean(scene, objs, key, enemyArr){
     for(let i = 0; i < objs.length; i++){
       if(objs[i].key === key){
         objs.splice(i, 1);
       }
     }
     scene.remove(this.asteroidObj);
-    let idx = asteroids.indexOf(this.asteroidObj.key);
+    let idx = enemyArr.indexOf(this.asteroidObj.key);
     
     if(idx !== -1){
-      asteroids.splice(idx, 1);
+      enemyArr.splice(idx, 1);
     }
   }
   //called every frame, used to manage asteroid behaviour
-  manage(scene, objs, key, asteroids){
+  manage(scene, objs, key, enemyArr){
     //determines wether the asteroid should be destroyed, and if so, wether points should be added for it
     if(this.asteroidObj.toDestroy && this.asteroidObj.hit){
-      this.destroyByHit(scene, objs, key, asteroids);
+      this.destroyByHit(scene, objs, key, enemyArr);
     }else if(this.asteroidObj.toDestroy){
-      this.clean(scene, objs, key, asteroids);
+      this.clean(scene, objs, key, enemyArr);
     }
     //sets initial velocity
     if(this.setVelocity){
-      this.asteroidObj.setLinearVelocity(new THREE.Vector3(0, this.getVelocity(), 0));
+      this.asteroidObj.setLinearVelocity(new THREE.Vector3(0, -125, 0));
       this.setVelocity = false;
     }
     if(this.setAngular){
@@ -99,12 +96,12 @@ class AsteroidModel {
     }
     //cleans the asteroid if it wasn't destroyed by the time it got out of the map
     if(this.asteroidObj.position.y <= -400){
-      this.clean(scene, objs, key, asteroids);
+      this.clean(scene, objs, key, enemyArr);
     }
   };
   //manages the destruction of the asteroid if it was hit, and set the new score
-  destroyByHit(scene, objs, key, asteroids){
-    this.clean(scene, objs, key, asteroids);
+  destroyByHit(scene, objs, key, enemyArr){
+    this.clean(scene, objs, key, enemyArr);
     this.asteroidExplosionMusic.play();
     score += 10;
     displayScore();

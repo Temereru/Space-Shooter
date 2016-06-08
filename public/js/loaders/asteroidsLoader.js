@@ -1,6 +1,6 @@
 //module for loading all asteroid related models, textures and sound files
-var asteroidJsonLoader = new THREE.JSONLoader();
-var asteroidTextureLoader = new THREE.TextureLoader();
+let asteroidJsonLoader = new THREE.JSONLoader();
+let asteroidTextureLoader = new THREE.TextureLoader();
 
 const loadedAsteroids = {};
 
