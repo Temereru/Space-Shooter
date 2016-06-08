@@ -26,12 +26,12 @@ serverDef.io.on('connection', function(socket){
   });
 });
 
-  // var game = new Game();
-  // game.name = 'single';
-  // for(i = 0; i < 10; i++){
-  //   game.scoreBoard[i] = {username: '', score: 0}
-  //   game.save(function(){});
-  // }
+  var game = new Game();
+  game.name = 'single';
+  for(i = 0; i < 10; i++){
+    game.scoreBoard[i] = {username: '', score: 0}
+    game.save(function(){});
+  }
 
 
 serverDef.app.listen(8081);
