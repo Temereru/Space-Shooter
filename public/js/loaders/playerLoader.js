@@ -1,6 +1,6 @@
 //module for loading all player related models and textures
-var playerJsonLoader = new THREE.JSONLoader();
-var playerTextureLoader = new THREE.TextureLoader();
+let playerJsonLoader = new THREE.JSONLoader();
+let playerTextureLoader = new THREE.TextureLoader();
 
 const loadedPlayer = {};
 
