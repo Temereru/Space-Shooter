@@ -1,6 +1,6 @@
 //define variables for future use
-let player, asteroid, managedObjects, score, 
-asteroids, betweenWaves, waveNumber, shotCounter, scene, background;
+let player, asteroid, managedObjects, score, enemy, 
+enemyArr, betweenWaves, waveNumber, shotCounter, scene, background;
 
 //initiate the resource loading sequence upon page load, passes the next function in the sequence as callback
 asteroidLoader().load(loadPlayer);
@@ -15,6 +15,19 @@ let keyboard = new THREEx.KeyboardState();
 let loaded = false;
 let firstRun = true;
 let gameRunning = false;
+let intervalList = [];
+let wavesPieces = [
+  [0,0,0,0,0,3,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,3],
+  [0,0,0,0,3,0,0,0,3,0],
+  [0,0,0,0,0,0,3,0,0,3],
+  [0,0,0,0,0,3,0,0,3,0],
+  [0,0,3,0,0,0,0,3,0,0],
+  [0,0,0,0,0,3,0,0,3,0],
+  [0,3,0,3,0,0,0,0,3,0],
+  [0,0,3,0,0,3,0,3,0,3],
+  [0,3,0,0,3,0,3,0,3,0],
+];//the directions for the waves pieces| 0 is asteroid, 3 is enemy. 1 & 2 are left for future implementations of other types of asteroids
 
 //define the geometry for the background
 let planeGeometry = new THREE.PlaneGeometry( 497.5, window.innerHeight - 1);
@@ -37,8 +50,8 @@ function initialState(){
   //objects in this array will have their manage function called every frame
   managedObjects = [];
   score = 0;
-  //this array is used to monitor the amount of asteroids for wave and game ending controll
-  asteroids = [];
+  //this array is used to monitor the amount of enemies for wave and game ending controll
+  enemyArr = [];
   betweenWaves = true;
   waveNumber = 0;
   shotCounter = 0;
@@ -54,7 +67,12 @@ function loadPlayer(){
 
 //a step in the resource loading sequence, passes the next function in the sequence as callback
 function loadShots(){
-  shotsLoader().load(loadScene);
+  shotsLoader().load(loadEnemy);
+}
+
+//a step in the resource loading sequence, passes the next function in the sequence as callback
+function loadEnemy(){
+  enemyLoader().load(loadScene);
 }
 
 //a step in the resource loading sequence, passes the next function in the sequence as callback
@@ -91,15 +109,22 @@ function addObjects(classObj, obj){
 //handles the wave spawning
 function spawnWave(){
   betweenWaves = false;
-  //creates asteroids, amount is defined by for loop, sets a half a second delay between asteroid
-  for(let i = 0; i < 10; i++){
-    if(i === 0){
+  //creates asteroids, amount and type is defined by wavesPieces array, sets a half a second delay between asteroid
+  for(let i = 0; i < wavesPieces.length; i++){
+    if(i === 0){//first one without a delay, currently always an asteroid
       asteroid = new AsteroidModel();
-      addObjects(testAsteroid, testAsteroid.asteroidObj);
+      addObjects(asteroid, asteroid.asteroidObj);
     }else{
         setTimeout(function(){
-        asteroid = new AsteroidModel();
-        addObjects(testAsteroid, testAsteroid.asteroidObj);
+          let type = wavesPieces[waveNumber][i];
+          if(type === 0){
+            asteroid = new AsteroidModel();
+            addObjects(asteroid, asteroid.asteroidObj);
+          }else if(type === 3){
+            enemy = new EnemyModel();
+            addObjects(enemy, enemy.enemyObj);
+          }
+
       }, i * 500);
     }
   }
@@ -156,7 +181,7 @@ function playBgMusic(){
 function manageObjects(){
   manageKeyboard();
   for(var i = 0; i < managedObjects.length; i++){
-    managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key, asteroids);
+    managedObjects[i].obj.manage(scene, managedObjects, managedObjects[i].key, enemyArr);
   }
 }
 
@@ -165,11 +190,11 @@ function render() {
   //only does stuff if the game is running
   if(gameRunning){
     //if true, the game will end
-    if(asteroids.length === 0 && waveNumber === 10 && !betweenWaves){
+    if(enemyArr.length === 0 && waveNumber === 10 && !betweenWaves){
       betweenWaves = true;
       endGame(true);
     //if true, the next wave will be spawned in 2 seconds
-    }else if(asteroids.length === 0 && !betweenWaves){
+    }else if(enemyArr.length === 0 && !betweenWaves){
       betweenWaves = true;
       setTimeout(function(){
         spawnWave();
@@ -236,6 +261,9 @@ function displayScore(){
 function endGame(win){
   firstRun = false;
   bgMusic.pause();
+  for(let i = 0; i < intervalList.length; i++){
+    clearInterval(intervalList[i]);
+  }
   if(win){
     gameRunning = false;
     $('.submit-score .title').text('You Win!');

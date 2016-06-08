@@ -24,7 +24,7 @@ class PlayerShot{
     this.playerShotObj.toDestroy = false;
     //add a listener for collision events that involve the shot
     this.playerShotObj.addEventListener( 'collision', function(other_object, relative_velocity, relative_rotation, contact_normal) {
-      if(other_object.objType === 'asteroid'){
+      if(other_object.objType === 'asteroid' || other_object.objType === 'enemy'){
         this.toDestroy = true;
         other_object.toDestroy = true;
         other_object.hit = true;
