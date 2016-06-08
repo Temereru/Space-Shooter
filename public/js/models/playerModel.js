@@ -24,6 +24,10 @@ class PlayerModel{
     this.playerObj.clean = this.clean;
     //if true, the player would be destroyed in the manage function, and the game will end
     this.playerObj.toDestroy = false;
+    //create and add a child sphere to the asteroid, makes collision detection better
+    this.sphere = new Physijs.SphereMesh(new THREE.SphereGeometry(40, 32, 32))
+    this.sphere._physijs.collision_flags = 4;
+    this.playerObj.add(this.sphere);
     //object used to determine which direction should the player move; used by the manage function
     this.direction = {
       left: false,
