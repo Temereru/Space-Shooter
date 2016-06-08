@@ -7,23 +7,31 @@
 </head>
 
 <body>
-  <h2 class="score"></h2>
-  <h2 class="wave"></h2>
-  <div class="overlay">
+  <h2 class="score"></h2><!-- text element for the score text -->
+  <h2 class="wave"></h2><!-- text element for the wave text -->
+
+  <div class="overlay"><!-- endgame overlay -->
     <h4>To restart, press R</h4>
   </div>
+
+  <!-- on load overlay -->
   <div class="start-overlay show">
     <h1 class="start-text">Space Shooter</h1>
     <h4 class="first-line">To begin, press <span>enter</span>. move your ship with the <span>arrow keys</span>, shoot with the <span>spacebar</span></h4>
     <h4 class="second-line">Survive the waves of asteroids to win</h4>
   </div>
-  <h1 class="loading-text show">Loading Assets</h1>
+
+  <h1 class="loading-text show">Loading Assets</h1><!-- text element for the loader message -->
+
+  <!-- menu div -->
   <div class="menu">
     <h2 class="logged-user"></h2> 
     <button class="register">Register</button>
     <button class="login">Login</button>
     <button class="logout">Logout</button>
   </div>
+
+  <!-- register form window div -->
   <form class="register-form">
     <h3>Register</h3>
     <input class="username" type="text" placeholder="username"></input>
@@ -32,6 +40,8 @@
     <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
     <p class="error"></p>
   </form>
+
+  <!-- login form window div -->
   <form class="login-form">
     <h3>Login</h3>
     <input class="username" type="text" placeholder="username"></input>
@@ -40,15 +50,21 @@
     <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
     <p class="error"></p>
   </form>
+
+  <!-- confirm logout window div -->
   <div class="logout-confirm">
     <h3>Are you Sure you want to log out</h3>
     <button>Log Out</button>
     <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
   </div>
+
+  <!-- logout successful window div -->
   <div class="logout-success">
     <h2 class="message">Logout Successfull!</h2>
     <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
   </div>
+
+  <!-- endgame submit score window div -->
   <div class="submit-score">
     <h3 class="title"></h3>
     <p class="score-text"></p>
@@ -56,7 +72,10 @@
     <i class="fa fa-times fa-lg close" aria-hidden="true"></i>
     <p class="message"></p>
   </div>
+  
+  <!-- scoreboards div -->
   <div class="scoreboards">
+    <!-- global highest scores table div -->
     <div class="highest-scores">
       <h3>Global Highest Scores</h3>
       <table class="score-list">
@@ -73,6 +92,7 @@
         <tr><td>10</td><td></td><td></td></tr>
       </table>
     </div>
+    <!-- user highest scores table div -->
     <div class="user-scores">
       <h3>Your Highest Scores</h3>
       <table class="score-list">
@@ -89,25 +109,33 @@
         <tr><td>10</td><td></td></tr>
       </table>
     </div>
-    </div>
-<script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="http://localhost:8082/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="js/imports/three.js"></script>
-<script type="text/javascript" src="js/imports/Physijs/physi.js"></script>
-<script type="text/javascript">
-  Physijs.scripts.worker = 'js/imports/Physijs/physijs_worker.js'; 
-  Physijs.scripts.ammo = '../ammo.js';
-</script>
-<script type="text/javascript" src="js/imports/threex.keyboardstate.js"></script>
-<script type="text/javascript" src="js/helperMethods.js"></script>
-<script type="text/javascript" src="js/loaders/shotsLoader.js"></script>
-<script type="text/javascript" src="js/loaders/asteroidsLoader.js"></script>
-<script type="text/javascript" src="js/loaders/playerLoader.js"></script>
-<script type="text/javascript" src="js/loaders/sceneLoader.js"></script>
-<script type="text/javascript" src="js/models/playerModel.js"></script>
-<script type="text/javascript" src="js/models/playerShot.js"></script>
-<script type="text/javascript" src="js/models/asteroidModel.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
-<script type="text/javascript" src="js/stuffManager.js"></script>
+  </div>
+
+  <!-- load dependencies -->
+  <script type="text/javascript" src="jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="js/imports/three.js"></script>
+  <script type="text/javascript" src="js/imports/Physijs/physi.js"></script>
+
+  <!-- load the socket.io.js file, being served from the server -->
+  <script type="text/javascript" src="http://localhost:8082/socket.io/socket.io.js"></script>
+
+  <!-- define paths for the physijs worker and the ammo.js, required in the physi.js file -->
+  <script type="text/javascript">
+    Physijs.scripts.worker = 'js/imports/Physijs/physijs_worker.js'; 
+    Physijs.scripts.ammo = '../ammo.js';
+  </script>
+
+  <!-- load all js files for the project -->
+  <script type="text/javascript" src="js/imports/threex.keyboardstate.js"></script>
+  <script type="text/javascript" src="js/helperMethods.js"></script>
+  <script type="text/javascript" src="js/loaders/shotsLoader.js"></script>
+  <script type="text/javascript" src="js/loaders/asteroidsLoader.js"></script>
+  <script type="text/javascript" src="js/loaders/playerLoader.js"></script>
+  <script type="text/javascript" src="js/loaders/sceneLoader.js"></script>
+  <script type="text/javascript" src="js/models/playerModel.js"></script>
+  <script type="text/javascript" src="js/models/playerShot.js"></script>
+  <script type="text/javascript" src="js/models/asteroidModel.js"></script>
+  <script type="text/javascript" src="js/main.js"></script>
+  <script type="text/javascript" src="js/stuffManager.js"></script>
 </body>
 </html>
