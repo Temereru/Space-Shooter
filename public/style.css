@@ -58,7 +58,7 @@ canvas {
   top: 35%;
 }
 
-.start-overlay .first-line{
+.start-overlay .first-line, .start-overlay .second-line{
   color: white;
   position: absolute;
   left: 30%;
@@ -70,10 +70,24 @@ canvas {
 }
 
 .start-overlay .second-line{
-  color: white;
-  position: absolute;
   left: 38%;
   top: 45%;
+}
+
+.start-login-warning {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  color: #b30000;
+  display: none;
+}
+
+.restart-login-warning {
+  position: absolute;
+  top: 50%;
+  left: 37%;
+  color: #b30000;
+  display: none;
 }
 
 .loading-text {

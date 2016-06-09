@@ -221,6 +221,9 @@ function setLoggedIn(){
   $('.menu .register').removeClass('show');
   $('.menu .login').removeClass('show');
   $('.menu .logout').addClass('show');
+  //make sure the login warnings are hidden
+  $('.restart-login-warning').removeClass('show');
+  $('.start-login-warning').removeClass('show');
   getUserScores();
 }
 

@@ -30,8 +30,6 @@ class EnemyModel {
     this.enemyObj._physijs.collision_flags = 4;
     //add the enemy to the enemies list, used to detect wave endings and game ending
     enemyArr.push(this.enemyObj.key);
-    //if true, the manage function will set the enemy velocity
-    this.setVelocity = true;
     //create the audio element that will be used upon enemy destruction
     this.enemyExplosionMusic = document.createElement('audio');
     this.enemyExplosionMusic.appendChild(loadedEnemy.enemyExplosionMusicSource);    
@@ -103,9 +101,8 @@ class EnemyModel {
     }
 
     //sets initial velocity
-    if(this.setVelocity){
+    if(vel.y === 0){
       vel.y = -125;
-      this.setVelocity = false;
     }
 
     //send the updated linear velocity

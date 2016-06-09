@@ -149,6 +149,8 @@ function start(){
   spawnWave();
   //start playing background music
   playBgMusic();
+  //display initial score
+  displayScore();
   //start the render loop
   render(); 
 }
@@ -245,7 +247,7 @@ function manageKeyboard(){
 //return true only if there is no window open
 function focusOnGame(){
   if($('.register-form').hasClass('show') || $('.login-form').hasClass('show') || $('.logout-confirm').hasClass('show') 
-    || $('.logout-success').hasClass('show') || $('.submit-score').hasClass('show') || getToken() === undefined){
+    || $('.logout-success').hasClass('show') || $('.submit-score').hasClass('show')){
     return false;
   }else{
     return true;
@@ -284,14 +286,18 @@ $(document).on('keydown' , function (e) {
   switch(e.which){
     //if the R key was pressed
     case 82:
-      if(!gameRunning && !firstRun && focusOnGame()){
+      if(!gameRunning && !firstRun && focusOnGame() && getToken() !== undefined){
         restart();
-      };
+      }else if(getToken() === undefined){
+        $('.restart-login-warning').addClass('show');
+      }
       break;
     //if the ENTER key was pressed
     case 13:
-      if(!gameRunning && firstRun && loaded && focusOnGame()){
+      if(!gameRunning && firstRun && loaded && focusOnGame() && getToken() !== undefined){
         start();
+      }else if(getToken() === undefined){
+        $('.start-login-warning').addClass('show');
       }
       break;
   }
